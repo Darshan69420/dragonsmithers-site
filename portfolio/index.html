@@ -2,180 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Darshan Sanjel | Cybersecurity &amp; IT Portfolio</title>
-  <meta name="description" content="Darshan Sanjel: cybersecurity student and IT tech. Home lab, Wazuh SIEM, Proxmox, networking, and web projects.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Darshan Sanjel | Cybersecurity &amp; IT</title>
+  <meta name="description" content="Darshan Sanjel: cybersecurity student and IT tech in Fairfield, OH. Wazuh SIEM, Proxmox home lab, networking and web projects.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<header class="nav">
+<header class="top">
   <div class="wrap">
-    <a class="brand" href="/"><img src="/favicon.svg" alt="" width="28" height="28">DragonSmiths</a>
-    <nav class="nav-links">
+    <a class="mark" href="/"><img src="/favicon.svg" alt="" width="30" height="30">DragonSmiths</a>
+    <nav class="menu" aria-label="Main">
       <a href="#projects">Projects</a>
-      <a href="#skills" class="hide-sm">Skills</a>
-      <a href="#experience" class="hide-sm">Experience</a>
+      <a href="#skills" class="opt">Skills</a>
+      <a href="#history" class="opt">Experience</a>
       <a href="#contact">Contact</a>
-      <a href="/" class="hide-sm">Repair services</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <div class="hero">
-    <div class="wrap profile">
-      <div class="avatar">DS</div>
-      <div style="flex:1;min-width:260px">
-        <div class="eyebrow">Cybersecurity · IT Support · Systems &amp; Networking</div>
-        <h1 style="margin-bottom:12px">Darshan <span class="hl">Sanjel</span></h1>
-        <p class="lead" style="margin-bottom:20px">Cybersecurity student based in Fairfield, OH. I run a self-hosted security lab (Wazuh SIEM, Proxmox, Active Directory, Pi-hole), have done university help desk work, and build web apps.</p>
-        <div class="cta">
-          <a class="btn primary" href="mailto:darshan@dragonsmithers.com?subject=Opportunity">Email me</a>
+  <section class="sheet-head">
+    <div class="wrap">
+      <div class="part">
+        <span>Role <b>Cybersecurity · IT Support · Systems &amp; Networking</b></span>
+        <span>Location <b>Fairfield, OH</b></span>
+        <span>Status <b style="color:var(--ok)">Open to work</b></span>
+      </div>
+      <h1>Darshan Sanjel</h1>
+      <div class="sheet-intro">
+        <p>Cybersecurity student who learns by running real systems. I operate a home security lab with a Wazuh SIEM, Proxmox, Active Directory and Pi-hole, worked a university IT help desk, and build and ship my own web tools.</p>
+        <div class="actions">
+          <a class="btn solid" href="mailto:darshan@dragonsmithers.com?subject=Opportunity">Email me</a>
           <a class="btn" href="https://github.com/sanjeldarshan65-afk" target="_blank" rel="noopener">GitHub</a>
-          <a class="btn" href="#projects">View projects</a>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <section id="certs">
-    <div class="wrap">
-      <h2>Certifications</h2>
-      <p class="sub">Completed and in progress.</p>
-      <div class="grid">
-        <div class="card"><span class="status">● Completed</span><h3>Google Cloud Cybersecurity Certificate</h3><p>Security fundamentals, threat detection, incident response, cloud security.</p></div>
-        <div class="card"><span class="status" style="color:var(--ember-2)">◐ In progress</span><h3>CompTIA A+</h3><p>Core 1 &amp; Core 2 (220-1201 / 220-1202): hardware, OS, troubleshooting.</p></div>
-        <div class="card"><span class="status" style="color:var(--ember-2)">◐ In progress</span><h3>CompTIA Security+</h3><p>Security operations, architecture, threats and vulnerabilities.</p></div>
       </div>
     </div>
   </section>
 
-  <section id="projects">
+  <section class="band board">
     <div class="wrap">
-      <h2>Projects</h2>
-      <p class="sub">Things I've built and run myself.</p>
-      <div class="grid wide">
+      <div class="band-head">
+        <h2>At a glance</h2>
+        <p>What I bring to an IT support, help desk, data center or security role.</p>
+      </div>
+      <ul class="features">
+        <li>Google Cloud Cybersecurity Certificate (completed)</li>
+        <li>CompTIA A+ (220-1201/1202) and Security+ in progress</li>
+        <li>Front-line support experience at a university help desk</li>
+        <li>Runs a Wazuh SIEM with agents, alerting and a custom dashboard</li>
+        <li>Administers a Proxmox VE hypervisor with VMs, LXC and Docker</li>
+        <li>Windows Server and Active Directory: users, OUs, Group Policy</li>
+        <li>DNS, mail authentication and domain admin for a live domain</li>
+        <li>Writes JavaScript/TypeScript, Bash and Node.js tooling</li>
+      </ul>
+    </div>
+  </section>
 
-        <div class="card project">
-          <span class="status">● Ongoing</span>
-          <h3>Wazuh SIEM: Self-Hosted Security Monitoring</h3>
-          <ul>
-            <li>Deployed Wazuh 4.14 all-in-one on a dedicated Ubuntu 24.04 VM, with agents enrolled on the hypervisor and SIEM host.</li>
-            <li>Routed logs through a Node.js/Express proxy into local LLMs to draft incident-response write-ups automatically.</li>
-            <li>Built a custom React dashboard showing alerts and network anomalies.</li>
-          </ul>
-          <div class="tags"><span class="tag">Wazuh</span><span class="tag">Ubuntu</span><span class="tag">Node.js</span><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Local LLMs</span></div>
-        </div>
+  <section class="band" id="projects">
+    <div class="wrap">
+      <div class="band-head">
+        <h2>Projects</h2>
+        <p>Systems I built and run myself, with the stack used for each.</p>
+      </div>
+      <div class="projects">
 
-        <div class="card project">
-          <span class="status">● Ongoing</span>
-          <h3>Proxmox Home Lab: Virtualization &amp; Networking</h3>
-          <ul>
-            <li>Administer a Proxmox VE 9 hypervisor running Linux VMs, LXC and Docker containers, with TOTP 2FA.</li>
-            <li>Pi-hole in a dedicated LXC for network-wide DNS filtering with Cloudflare upstreams. Took an LVM-thin snapshot first for rollback.</li>
-            <li>GPU-accelerated (RTX 3060) self-hosted LLM with a web UI. Remote access goes over a Tailscale mesh VPN, with no open ports.</li>
-            <li>Fixed outages caused by static-IP misconfiguration and a USB NIC negotiating at 100 Mb/s with carrier drops.</li>
-          </ul>
-          <div class="tags"><span class="tag">Proxmox VE</span><span class="tag">Debian</span><span class="tag">LXC</span><span class="tag">Docker</span><span class="tag">Pi-hole</span><span class="tag">Tailscale</span><span class="tag">LVM</span></div>
-        </div>
-
-        <div class="card project">
-          <span class="status">● Live</span>
-          <h3>Trail Window: Weather-Window Planner</h3>
-          <ul>
-            <li>Static web app that ranks the best hours in the next 5 days for a hike, ride or run by rain, wind and feels-like penalties, and shows its math.</li>
-            <li>In-browser GPX parsing, forecasts along a route, adaptive packing list, shareable plan links.</li>
-            <li>AI trail briefing through a locked-down Cloudflare Worker: server-side API key, CORS allowlist, input validation, rate limiting, template fallback.</li>
-            <li>Unit tests plus Playwright responsive checks at 390/768/1280px.</li>
-          </ul>
-          <div class="tags"><span class="tag">JavaScript</span><span class="tag">Leaflet</span><span class="tag">Open-Meteo</span><span class="tag">Cloudflare Workers</span><span class="tag">Playwright</span></div>
-          <div class="links">
-            <a href="https://sanjeldarshan65-afk.github.io/trail-window/" target="_blank" rel="noopener">Live demo →</a>
-            <a href="https://github.com/sanjeldarshan65-afk/trail-window" target="_blank" rel="noopener">Code →</a>
+        <article class="proj">
+          <aside>
+            <span class="state wip"><i></i>Ongoing</span>
+            <div class="stack">Wazuh 4.14<br>Ubuntu 24.04<br>Node.js · Express<br>React · TypeScript<br>Local LLMs</div>
+          </aside>
+          <div>
+            <h3>Wazuh SIEM: self-hosted security monitoring</h3>
+            <ul>
+              <li>Deployed a Wazuh all-in-one SIEM on a dedicated Ubuntu VM and enrolled agents on the hypervisor and the SIEM host for log collection and alerting.</li>
+              <li>Routed collected logs through a Node.js and Express proxy into locally hosted language models to draft incident-response write-ups.</li>
+              <li>Built a React dashboard that shows Wazuh alerts and network anomalies next to the native interface.</li>
+            </ul>
           </div>
-        </div>
+        </article>
 
-        <div class="card project">
-          <span class="status">● Live</span>
-          <h3>DragonSmiths: Domain, Email &amp; Web Infrastructure</h3>
-          <ul>
-            <li>Administer a Google Workspace tenant: users, 2-Step Verification policy, DKIM signing, billing.</li>
-            <li>Manage DNS at the registrar (A, CNAME, MX, TXT, SPF/DKIM) for email and web routing.</li>
-            <li>Host this site on GitHub Pages with a custom domain, enforced HTTPS, and GitHub domain verification to block subdomain-takeover attacks.</li>
-          </ul>
-          <div class="tags"><span class="tag">Google Workspace</span><span class="tag">DNS</span><span class="tag">SPF/DKIM</span><span class="tag">GitHub Pages</span><span class="tag">HTML/CSS</span></div>
-          <div class="links"><a href="/">Visit site →</a></div>
-        </div>
-
-        <div class="card project">
-          <span class="status">● Live</span>
-          <h3>DarQuest: Browser 3D Action RPG</h3>
-          <ul>
-            <li>Real-time 3D RPG that runs in the browser: six schools of magic, dodge-based combat, enemy AI, two-phase boss fights, pets, gear, auto-save.</li>
-            <li>Code-built toon models, synthesized audio and music, minimap. Plain ES modules with no build step.</li>
-            <li>Built with an AI-assisted workflow (Claude Code / Codex agents).</li>
-          </ul>
-          <div class="tags"><span class="tag">JavaScript</span><span class="tag">Three.js</span><span class="tag">Web Audio</span><span class="tag">AI-assisted dev</span></div>
-          <div class="links">
-            <a href="https://darshan69420.github.io/DarQuest/" target="_blank" rel="noopener">Play →</a>
-            <a href="https://github.com/Darshan69420/DarQuest" target="_blank" rel="noopener">Code →</a>
+        <article class="proj">
+          <aside>
+            <span class="state wip"><i></i>Ongoing</span>
+            <div class="stack">Proxmox VE 9<br>Debian · LXC · Docker<br>Pi-hole · Tailscale<br>LVM-thin · Bash<br>RTX 3060</div>
+          </aside>
+          <div>
+            <h3>Proxmox home lab: virtualization and networking</h3>
+            <ul>
+              <li>Administer a Proxmox VE hypervisor on a repurposed 64 GB laptop running Linux VMs and LXC containers, with TOTP two-factor login.</li>
+              <li>Run Pi-hole in its own LXC for network-wide DNS filtering with Cloudflare upstreams. I took an LVM-thin snapshot before install as a rollback point.</li>
+              <li>Host a GPU-accelerated LLM with a web UI and reach the lab remotely over a Tailscale mesh VPN without opening ports.</li>
+              <li>Traced outages to a static-IP misconfiguration and to a USB Ethernet adapter negotiating at 100 Mb/s with intermittent carrier drops.</li>
+            </ul>
           </div>
-        </div>
+        </article>
+
+        <article class="proj">
+          <aside>
+            <span class="state"><i></i>Live</span>
+            <div class="stack">JavaScript<br>Leaflet · Open-Meteo<br>Cloudflare Workers<br>Playwright</div>
+          </aside>
+          <div>
+            <h3>Trail Window: weather-window planner</h3>
+            <ul>
+              <li>Ranks every daylight window in the next five days for a hike, ride or run by rain, wind and feels-like penalties, and shows the scoring math.</li>
+              <li>Parses GPX files in the browser and forecasts conditions at each checkpoint for the hour you'd reach it.</li>
+              <li>The AI trail briefing runs behind a locked-down Cloudflare Worker: server-side API key, CORS allowlist, strict input validation, rate limiting, and a template fallback.</li>
+              <li>Covered by unit tests and Playwright responsive checks at 390, 768 and 1280 px.</li>
+            </ul>
+            <div class="links">
+              <a href="https://sanjeldarshan65-afk.github.io/trail-window/" target="_blank" rel="noopener">Live demo</a>
+              <a href="https://github.com/sanjeldarshan65-afk/trail-window" target="_blank" rel="noopener">Source</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="proj">
+          <aside>
+            <span class="state"><i></i>Live</span>
+            <div class="stack">Google Workspace<br>DNS · SPF · DKIM<br>GitHub Pages<br>HTML · CSS</div>
+          </aside>
+          <div>
+            <h3>DragonSmiths: domain, email and web</h3>
+            <ul>
+              <li>Administer a Google Workspace tenant: users, 2-Step Verification policy, DKIM signing and billing.</li>
+              <li>Manage A, CNAME, MX and TXT records at the registrar for mail delivery and web routing.</li>
+              <li>Host this site on GitHub Pages with a custom domain, enforced HTTPS, and a verified domain to block subdomain takeover.</li>
+            </ul>
+            <div class="links"><a href="/">Visit the repair site</a></div>
+          </div>
+        </article>
+
+        <article class="proj">
+          <aside>
+            <span class="state"><i></i>Playable</span>
+            <div class="stack">JavaScript<br>Three.js<br>Web Audio<br>AI-assisted</div>
+          </aside>
+          <div>
+            <h3>DarQuest: 3D action RPG in the browser</h3>
+            <ul>
+              <li>Real-time spell combat with dodging, enemy AI, two-phase bosses, pets, gear and auto-save across two chapters.</li>
+              <li>Toon models built in code, synthesized sound and music, and a quest minimap. Plain ES modules with no build step.</li>
+              <li>Built with AI coding agents (Claude Code and Codex), which I directed, reviewed and tested.</li>
+            </ul>
+            <div class="links">
+              <a href="https://darshan69420.github.io/DarQuest/" target="_blank" rel="noopener">Play it</a>
+              <a href="https://github.com/Darshan69420/DarQuest" target="_blank" rel="noopener">Source</a>
+            </div>
+          </div>
+        </article>
 
       </div>
     </div>
   </section>
 
-  <section id="skills">
+  <section class="band" id="skills">
     <div class="wrap">
-      <h2>Skills</h2>
-      <p class="sub">Tools I've used hands-on.</p>
-      <div class="skills">
-        <div class="card"><h3>Security</h3><p>Wazuh SIEM, log analysis, network security monitoring, incident-response documentation, 2FA/TOTP, email authentication (SPF/DKIM/DMARC)</p></div>
-        <div class="card"><h3>Systems &amp; Identity</h3><p>Linux (Ubuntu, Debian), Windows Server, Active Directory (users, groups, OUs, GPO), Proxmox VE, Docker, LXC, Google Workspace Admin</p></div>
-        <div class="card"><h3>Networking</h3><p>DNS (A/CNAME/MX/TXT), DNS filtering, Pi-hole, VPN (Tailscale), static IP addressing, firewall rules, troubleshooting</p></div>
-        <div class="card"><h3>Development</h3><p>JavaScript, TypeScript, Bash, React, Node.js, Express, SQL/SQLite, REST APIs, Git/GitHub, Cloudflare Workers, AI coding agents</p></div>
+      <div class="band-head">
+        <h2>Specifications</h2>
+        <p>Tools I've used hands-on in the lab or on the job.</p>
+      </div>
+      <div class="spec-wrap">
+        <table class="spec">
+          <tr><th scope="row">Security</th><td>Wazuh SIEM, log analysis, network security monitoring, incident-response write-ups, TOTP 2FA, SPF / DKIM / DMARC</td></tr>
+          <tr><th scope="row">Systems</th><td>Ubuntu, Debian, Windows Server, Active Directory (users, groups, OUs, Group Policy), Proxmox VE, Docker, LXC, Google Workspace Admin</td></tr>
+          <tr><th scope="row">Networking</th><td>DNS records and filtering, Pi-hole, Tailscale VPN, static addressing, firewall rules, link-level troubleshooting</td></tr>
+          <tr><th scope="row">Development</th><td>JavaScript, TypeScript, Bash, React, Node.js, Express, SQL / SQLite, REST APIs, Git, Cloudflare Workers</td></tr>
+          <tr><th scope="row">Hardware</th><td>Repurposed a laptop into a hypervisor host, M.2 SSD installs, GPU setup (RTX 3060) for local LLMs</td></tr>
+        </table>
       </div>
     </div>
   </section>
 
-  <section id="experience">
+  <section class="band" id="history">
     <div class="wrap">
-      <h2>Experience &amp; Education</h2>
-      <p class="sub">&nbsp;</p>
-      <div class="timeline">
-        <div class="tl">
-          <div class="when">Feb – May 2025</div>
-          <div><h3>IT Help Desk Assistant, Miami University Regionals</h3><p>Front-line support for students, faculty and staff in person. Password resets and account recovery. Set up classroom and lab computers and peripherals.</p></div>
+      <div class="band-head">
+        <h2>Experience &amp; education</h2>
+        <p>&nbsp;</p>
+      </div>
+      <div class="history">
+        <div>
+          <span class="when">Feb – May 2025</span>
+          <div><h3>IT Help Desk Assistant · Miami University Regionals</h3><p>In-person front-line support for students, faculty and staff. Password resets and account recovery, plus setup of classroom and lab computers and peripherals.</p></div>
         </div>
-        <div class="tl">
-          <div class="when">Expected 2028</div>
-          <div><h3>Associate Degree, Cybersecurity, University of Cincinnati Blue Ash</h3><p>Coursework in cybersecurity, networking and artificial intelligence. Earlier coursework at Miami University Regionals.</p></div>
+        <div>
+          <span class="when">Expected 2028</span>
+          <div><h3>A.S. Cybersecurity · University of Cincinnati Blue Ash</h3><p>Coursework in cybersecurity, networking and artificial intelligence. Earlier coursework at Miami University Regionals.</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="contact">
-    <div class="wrap">
-      <div class="contact-box">
-        <h2>Let's talk</h2>
-        <p>I'm looking for IT support, help desk, data center technician, and security internship roles in the Cincinnati / Dayton area. Resume available on request.</p>
-        <div class="cta">
-          <a class="btn primary" href="mailto:darshan@dragonsmithers.com?subject=Opportunity">darshan@dragonsmithers.com</a>
-          <a class="btn" href="https://github.com/sanjeldarshan65-afk" target="_blank" rel="noopener">GitHub</a>
+  <section class="band board" id="contact">
+    <div class="wrap split">
+      <div>
+        <h2>Hiring for IT, help desk or data center work?</h2>
+        <p class="muted" style="margin:14px 0 0">I'm looking for roles and internships around Cincinnati and Dayton. My resume is available on request.</p>
+      </div>
+      <div style="display:grid;gap:14px;align-content:start">
+        <span class="label">Email</span>
+        <code class="mono" style="font-size:20px;user-select:all;overflow-wrap:anywhere">darshan@dragonsmithers.com</code>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">
+          <a class="btn on-board" href="mailto:darshan@dragonsmithers.com?subject=Opportunity">Send an email</a>
+          <a class="btn on-board" href="https://github.com/sanjeldarshan65-afk" target="_blank" rel="noopener">GitHub</a>
         </div>
       </div>
     </div>
   </section>
 </main>
 
-<footer>
+<footer class="foot">
   <div class="wrap">
     <span>© <span id="y"></span> Darshan Sanjel</span>
-    <a href="/">DragonSmiths Tech Repair →</a>
+    <a href="/">DragonSmiths Tech Repair</a>
   </div>
 </footer>
 <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
