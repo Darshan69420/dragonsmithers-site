@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-wsmnxD6kqdZZ/V2wQ85d92sMux2lvh7NN1y5/Y5SS5c=' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://cloudflareinsights.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <title>Trail Window | Darshan Sanjel</title>
+  <meta name="description" content="Case study: Trail Window, a weather-window planner with GPX parsing and an AI briefing behind a hardened Cloudflare Worker (server-side key, CORS allowlist, validation, rate limiting).">
+  <link rel="canonical" href="https://dragonsmithers.com/portfolio/trail-window/">
+  <meta name="theme-color" content="#f2f4f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a120e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preload" href="/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/site.js" defer></script>
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="DragonSmiths">
+  <meta property="og:title" content="Trail Window | Darshan Sanjel">
+  <meta property="og:description" content="Case study: Trail Window, a weather-window planner with GPX parsing and an AI briefing behind a hardened Cloudflare Worker (server-side key, CORS allowlist, validation, rate limiting).">
+  <meta property="og:url" content="https://dragonsmithers.com/portfolio/trail-window/">
+  <meta property="og:image" content="https://dragonsmithers.com/og/trail-window.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Trail Window: case study by Darshan Sanjel">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Trail Window | Darshan Sanjel">
+  <meta name="twitter:description" content="Case study: Trail Window, a weather-window planner with GPX parsing and an AI briefing behind a hardened Cloudflare Worker (server-side key, CORS allowlist, validation, rate limiting).">
+  <meta name="twitter:image" content="https://dragonsmithers.com/og/trail-window.png">
+  <meta name="twitter:image:alt" content="Trail Window: case study by Darshan Sanjel">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Trail Window",
+    "description": "Case study: Trail Window, a weather-window planner with GPX parsing and an AI briefing behind a hardened Cloudflare Worker (server-side key, CORS allowlist, validation, rate limiting).",
+    "url": "https://dragonsmithers.com/portfolio/trail-window/",
+    "image": "https://dragonsmithers.com/og/trail-window.png",
+    "author": {
+      "@type": "Person",
+      "name": "Darshan Sanjel",
+      "url": "https://dragonsmithers.com/portfolio/"
+    }
+  }
+  </script>
+</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="/portfolio/"><img src="/favicon.svg" alt="" width="30" height="30">Darshan Sanjel</a>
+    <div class="nav">
+      <nav class="menu" aria-label="Main">
+        <a href="/portfolio/#projects" aria-current="page">Projects</a>
+        <a href="/portfolio/#resume" class="opt2">Résumé</a>
+        <a href="/portfolio/#contact" class="opt">Contact</a>
+        <a href="/" class="opt">Repair service</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Color theme: Auto. Change theme"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg><span>Auto</span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head" aria-labelledby="page-title">
+    <div class="wrap">
+      <ol class="crumbs"><li><a href="/portfolio/">Portfolio</a></li><li><a href="/portfolio/#projects">Projects</a></li><li aria-current="page">Trail Window</li></ol>
+      <span class="label">Case study</span>
+      <h1 id="page-title">A weather planner that shows its math, with a locked-down AI briefing.</h1>
+      <p class="lede">Trail Window ranks every daylight window in the next five days for a hike, ride or run. The AI trail briefing sits behind a Cloudflare Worker built like an API you would actually put on the internet.</p>
+      <dl class="case-meta">
+        <div><dt>Status</dt><dd>Live</dd></div>
+        <div><dt>Front end</dt><dd>JavaScript · Leaflet</dd></div>
+        <div><dt>Data</dt><dd>Open-Meteo</dd></div>
+        <div><dt>Back end</dt><dd>Cloudflare Workers</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="band">
+    <div class="wrap case">
+      <nav class="toc" aria-label="On this page">
+        <a href="#problem">The problem</a>
+        <a href="#setup">Setup</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#broke">What broke</a>
+        <a href="#next">What I'd do next</a>
+      </nav>
+      <article class="case-body">
+        <section id="problem" aria-labelledby="problem-h">
+          <h2 id="problem-h"><span class="step">01</span>The problem</h2>
+          <!-- TODO(darshan): put the "why" in your own words. This paragraph is a starting point. -->
+          <p>Weather apps tell you the forecast, not when to go. I wanted a tool that answers "when is the best time this week for this route?" and explains why, and I wanted its AI feature to be safe to leave running on the public internet.</p>
+          <p><a href="https://sanjeldarshan65-afk.github.io/trail-window/" rel="noopener">Try the live app</a> · <a href="https://github.com/sanjeldarshan65-afk/trail-window" rel="noopener">Read the source</a></p>
+        </section>
+        <section id="setup" aria-labelledby="setup-h">
+          <h2 id="setup-h"><span class="step">02</span>Setup</h2>
+          <ul>
+            <li>Ranks every daylight window in the next five days using <strong>rain, wind and feels-like penalties</strong>, and shows the scoring math instead of hiding it.</li>
+            <li>Parses <strong>GPX files in the browser</strong> and forecasts conditions at each checkpoint for the hour you'd reach it.</li>
+            <li>Maps with <strong>Leaflet</strong>; forecasts from <strong>Open-Meteo</strong>.</li>
+            <li>The AI trail briefing goes through a <strong>Cloudflare Worker</strong> with a server-side API key, a CORS allowlist, strict input validation, rate limiting, and a template fallback.</li>
+            <li><strong>Unit tests</strong> plus <strong>Playwright</strong> responsive checks at 390, 768 and 1280 px.</li>
+          </ul>
+        </section>
+        <section id="architecture" aria-labelledby="arch-h">
+          <h2 id="arch-h"><span class="step">03</span>Architecture</h2>
+          <figure class="diagram">
+  <div class="scroll" tabindex="0" role="region" aria-label="Trail Window architecture (scrolls sideways on small screens)">
+    <svg viewBox="0 0 760 330" role="img" aria-labelledby="tw-title tw-desc">
+      <title id="tw-title">Trail Window architecture</title>
+      <desc id="tw-desc">The static web app in the browser parses GPX files locally and fetches forecasts from Open-Meteo. For the AI briefing it calls a Cloudflare Worker, which checks CORS, validates input and rate-limits before calling the AI model with a server-side key, and falls back to a template if needed.</desc>
+      <defs>
+        <marker id="tw-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="pad" d="M0 0L10 5L0 10z"/></marker>
+        <marker id="tw-pad" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"><circle class="pad" cx="5" cy="5" r="4"/></marker>
+      </defs>
+      <rect class="zone" x="10" y="10" width="280" height="310" rx="6"/>
+      <text class="z" x="22" y="30">Your browser</text>
+      <rect class="box hot" x="30" y="50" width="240" height="92" rx="4"/>
+      <text class="t" x="44" y="76">Trail Window app</text>
+      <text class="s" x="44" y="96">static site · JavaScript</text>
+      <text class="s" x="44" y="113">Leaflet map · scoring</text>
+      <rect class="box" x="30" y="220" width="240" height="72" rx="4"/>
+      <text class="t" x="44" y="246">GPX file</text>
+      <text class="s" x="44" y="266">parsed in the browser</text>
+      <rect class="zone" x="330" y="10" width="420" height="310" rx="6"/>
+      <text class="z" x="342" y="30">Internet</text>
+      <rect class="box" x="560" y="50" width="170" height="72" rx="4"/>
+      <text class="t" x="574" y="76">Open-Meteo</text>
+      <text class="s" x="574" y="96">forecast API</text>
+      <rect class="box" x="350" y="150" width="230" height="150" rx="4"/>
+      <text class="t" x="364" y="176">Cloudflare Worker</text>
+      <text class="s" x="364" y="196">CORS allowlist</text>
+      <text class="s" x="364" y="213">input validation</text>
+      <text class="s" x="364" y="230">rate limiting</text>
+      <text class="s" x="364" y="247">API key stays here</text>
+      <text class="s" x="364" y="264">template fallback</text>
+      <rect class="box" x="610" y="190" width="120" height="72" rx="4"/>
+      <text class="t" x="624" y="216">AI model</text>
+      <text class="s" x="624" y="236">briefing</text>
+      <path class="wire" d="M150 220 V146" marker-end="url(#tw-ah)" marker-start="url(#tw-pad)"/>
+      <text class="s" x="158" y="186" text-anchor="start">checkpoints</text>
+      <path class="wire" d="M270 86 H556" marker-end="url(#tw-ah)" marker-start="url(#tw-pad)"/>
+      <text class="s" x="410" y="78" text-anchor="middle">forecast request</text>
+      <path class="wire" d="M270 120 H320 V200 H346" marker-end="url(#tw-ah)" marker-start="url(#tw-pad)"/>
+      <text class="s" x="326" y="160" text-anchor="start">briefing</text>
+      <path class="wire" d="M580 226 H606" marker-end="url(#tw-ah)" marker-start="url(#tw-pad)"/>
+    </svg>
+  </div>
+            <figcaption>The only secret, the AI API key, lives in the Worker. The browser never sees it, and the Worker rejects anything that is not from the app or not shaped like a real request.</figcaption>
+          </figure>
+          <!-- TODO(darshan): add a real screenshot here: save it as /portfolio/trail-window/screenshot.png (blur hostnames/IPs first)
+               and replace this placeholder with <figure><img src="screenshot.png" alt="..." width="1600" height="900" loading="lazy"></figure>. -->
+        </section>
+        <section id="broke" aria-labelledby="broke-h">
+          <h2 id="broke-h"><span class="step">04</span>What broke and how I fixed it</h2>
+          <h3>Threats the Worker is built against</h3>
+          <ul>
+            <li><strong>Leaked API key:</strong> the key is a server-side secret in the Worker, never shipped to the browser.</li>
+            <li><strong>Other sites using my endpoint:</strong> a CORS allowlist only accepts requests from the app's origin.</li>
+            <li><strong>Malformed or oversized input:</strong> strict validation rejects anything that isn't a well-formed briefing request.</li>
+            <li><strong>Abuse and runaway cost:</strong> rate limiting caps how often the endpoint can be called.</li>
+            <li><strong>Model outage:</strong> a template fallback still returns a useful briefing.</li>
+          </ul>
+          <!-- TODO(darshan): add one real bug you hit and fixed (a scoring edge case, a GPX parsing issue, a layout bug Playwright caught...)
+               using the Symptom / Cause / Fix format. -->
+        </section>
+        <section id="next" aria-labelledby="next-h">
+          <h2 id="next-h"><span class="step">05</span>What I'd do next</h2>
+          <!-- TODO(darshan): these are suggestions, not things you've said. Keep, edit or replace them. -->
+          <ul>
+            <li>Let people tune the penalty weights (some hikers don't mind wind) and save their preferences.</li>
+            <li>Add Worker request logging and alerting so abuse shows up before the rate limit does.</li>
+          </ul>
+        </section>
+        <nav class="next-case" aria-label="More case studies">
+          <a href="/portfolio/proxmox-lab/"><span>Previous</span><b>Proxmox home lab</b></a>
+          <a href="/portfolio/wazuh-siem/"><span>Next</span><b>Wazuh SIEM lab</b></a>
+        </nav>
+      </article>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <span class="label">Darshan Sanjel</span>
+      <p>Cybersecurity student in Fairfield, Ohio. Open to IT support, help desk, data center and security roles.</p>
+      <p><a href="mailto:darshan@dragonsmithers.com">darshan@dragonsmithers.com</a></p>
+    </div>
+    <div>
+      <span class="label">Repair</span>
+      <ul>
+        <li><a href="/#rates">Rates</a></li>
+        <li><a href="/business/">Business IT</a></li>
+        <li><a href="/#quote">Get a quote</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="label">Darshan</span>
+      <ul>
+        <li><a href="/portfolio/">Portfolio</a></li>
+        <li><a href="/portfolio/#resume">Résumé</a></li>
+        <li><a href="https://github.com/sanjeldarshan65-afk" rel="noopener">GitHub</a></li>
+      </ul>
+    </div>
+    <div class="legal">
+      <span>© <span data-year>2026</span> Darshan Sanjel</span>
+      <a href="/privacy/">Privacy</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

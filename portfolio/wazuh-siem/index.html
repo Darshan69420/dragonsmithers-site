@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-wsmnxD6kqdZZ/V2wQ85d92sMux2lvh7NN1y5/Y5SS5c=' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://cloudflareinsights.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <title>Wazuh SIEM lab | Darshan Sanjel</title>
+  <meta name="description" content="Case study: a Wazuh 4.14 SIEM on Ubuntu 24.04 with agents across a home lab, a Node/Express proxy to local LLMs for incident-response write-ups, and a React dashboard.">
+  <link rel="canonical" href="https://dragonsmithers.com/portfolio/wazuh-siem/">
+  <meta name="theme-color" content="#f2f4f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a120e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preload" href="/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/site.js" defer></script>
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="DragonSmiths">
+  <meta property="og:title" content="Wazuh SIEM lab | Darshan Sanjel">
+  <meta property="og:description" content="Case study: a Wazuh 4.14 SIEM on Ubuntu 24.04 with agents across a home lab, a Node/Express proxy to local LLMs for incident-response write-ups, and a React dashboard.">
+  <meta property="og:url" content="https://dragonsmithers.com/portfolio/wazuh-siem/">
+  <meta property="og:image" content="https://dragonsmithers.com/og/wazuh-siem.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Wazuh SIEM lab: case study by Darshan Sanjel">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Wazuh SIEM lab | Darshan Sanjel">
+  <meta name="twitter:description" content="Case study: a Wazuh 4.14 SIEM on Ubuntu 24.04 with agents across a home lab, a Node/Express proxy to local LLMs for incident-response write-ups, and a React dashboard.">
+  <meta name="twitter:image" content="https://dragonsmithers.com/og/wazuh-siem.png">
+  <meta name="twitter:image:alt" content="Wazuh SIEM lab: case study by Darshan Sanjel">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Wazuh SIEM lab",
+    "description": "Case study: a Wazuh 4.14 SIEM on Ubuntu 24.04 with agents across a home lab, a Node/Express proxy to local LLMs for incident-response write-ups, and a React dashboard.",
+    "url": "https://dragonsmithers.com/portfolio/wazuh-siem/",
+    "image": "https://dragonsmithers.com/og/wazuh-siem.png",
+    "author": {
+      "@type": "Person",
+      "name": "Darshan Sanjel",
+      "url": "https://dragonsmithers.com/portfolio/"
+    }
+  }
+  </script>
+</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="/portfolio/"><img src="/favicon.svg" alt="" width="30" height="30">Darshan Sanjel</a>
+    <div class="nav">
+      <nav class="menu" aria-label="Main">
+        <a href="/portfolio/#projects" aria-current="page">Projects</a>
+        <a href="/portfolio/#resume" class="opt2">Résumé</a>
+        <a href="/portfolio/#contact" class="opt">Contact</a>
+        <a href="/" class="opt">Repair service</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Color theme: Auto. Change theme"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg><span>Auto</span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head" aria-labelledby="page-title">
+    <div class="wrap">
+      <ol class="crumbs"><li><a href="/portfolio/">Portfolio</a></li><li><a href="/portfolio/#projects">Projects</a></li><li aria-current="page">Wazuh SIEM lab</li></ol>
+      <span class="label">Case study</span>
+      <h1 id="page-title">A self-hosted SIEM that drafts its own incident write-ups.</h1>
+      <p class="lede">Wazuh collecting logs from my home lab, with a Node.js proxy that hands alerts to locally hosted language models and a React dashboard on top.</p>
+      <dl class="case-meta">
+        <div><dt>Status</dt><dd>Ongoing</dd></div>
+        <div><dt>Core</dt><dd>Wazuh 4.14 · Ubuntu 24.04</dd></div>
+        <div><dt>Glue</dt><dd>Node.js · Express</dd></div>
+        <div><dt>UI</dt><dd>React · TypeScript</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="band">
+    <div class="wrap case">
+      <nav class="toc" aria-label="On this page">
+        <a href="#problem">The problem</a>
+        <a href="#setup">Setup</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#broke">What broke</a>
+        <a href="#next">What I'd do next</a>
+      </nav>
+      <article class="case-body">
+        <section id="problem" aria-labelledby="problem-h">
+          <h2 id="problem-h"><span class="step">01</span>The problem</h2>
+          <!-- TODO(darshan): put the "why" in your own words. This paragraph is a starting point. -->
+          <p>Security courses show alerts as screenshots. I wanted real ones: a SIEM watching machines I actually run, so I could practice triage and turn alerts into incident-response write-ups the way an analyst would.</p>
+        </section>
+        <section id="setup" aria-labelledby="setup-h">
+          <h2 id="setup-h"><span class="step">02</span>Setup</h2>
+          <ul>
+            <li><strong>Wazuh 4.14 all-in-one</strong> (manager, indexer and dashboard) on a dedicated <strong>Ubuntu 24.04</strong> VM.</li>
+            <li><strong>Agents</strong> enrolled on the hypervisor and on the SIEM host itself for log collection and alerting.</li>
+            <li>A <strong>Node.js / Express proxy</strong> that takes collected alerts and sends them to <strong>locally hosted language models</strong>, which draft incident-response write-ups.</li>
+            <li>A <strong>React + TypeScript dashboard</strong> that shows Wazuh alerts and network anomalies next to the native Wazuh interface.</li>
+          </ul>
+          <p>Because the models run on my own hardware, alert data (hostnames, usernames, IP addresses) never has to leave the lab to get a write-up drafted.</p>
+        </section>
+        <section id="architecture" aria-labelledby="arch-h">
+          <h2 id="arch-h"><span class="step">03</span>Architecture</h2>
+          <figure class="diagram">
+  <div class="scroll" tabindex="0" role="region" aria-label="Wazuh SIEM lab architecture (scrolls sideways on small screens)">
+    <svg viewBox="0 0 760 330" role="img" aria-labelledby="wz-title wz-desc">
+      <title id="wz-title">Wazuh SIEM lab architecture</title>
+      <desc id="wz-desc">Wazuh agents on the hypervisor and SIEM host send logs to a Wazuh all-in-one VM. Alerts go to a Node.js Express proxy, which sends prompts to a local language model and returns drafted write-ups. The proxy also feeds a React dashboard.</desc>
+      <defs>
+        <marker id="wz-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="pad" d="M0 0L10 5L0 10z"/></marker>
+        <marker id="wz-pad" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"><circle class="pad" cx="5" cy="5" r="4"/></marker>
+      </defs>
+      <rect class="zone" x="10" y="10" width="740" height="310" rx="6"/>
+      <text class="z" x="22" y="30">Home lab</text>
+      <rect class="box" x="30" y="60" width="200" height="72" rx="4"/>
+      <text class="t" x="44" y="86">Hypervisor</text>
+      <text class="s" x="44" y="106">Wazuh agent</text>
+      <rect class="box hot" x="270" y="44" width="260" height="104" rx="4"/>
+      <text class="t" x="284" y="70">Wazuh 4.14 all-in-one</text>
+      <text class="s" x="284" y="90">Ubuntu 24.04 VM</text>
+      <text class="s" x="284" y="107">manager · indexer · dashboard</text>
+      <text class="s" x="284" y="124">+ local agent</text>
+      <rect class="box" x="570" y="60" width="160" height="72" rx="4"/>
+      <text class="t" x="584" y="86">Express proxy</text>
+      <text class="s" x="584" y="106">Node.js</text>
+      <rect class="box" x="570" y="228" width="160" height="72" rx="4"/>
+      <text class="t" x="584" y="254">Local LLM</text>
+      <text class="s" x="584" y="274">self-hosted model</text>
+      <rect class="box" x="270" y="228" width="250" height="72" rx="4"/>
+      <text class="t" x="284" y="254">React dashboard</text>
+      <text class="s" x="284" y="274">alerts + network anomalies</text>
+      <path class="wire" d="M230 96 H266" marker-end="url(#wz-ah)" marker-start="url(#wz-pad)"/>
+      <text class="s" x="248" y="88" text-anchor="middle">logs</text>
+      <path class="wire" d="M530 96 H566" marker-end="url(#wz-ah)" marker-start="url(#wz-pad)"/>
+      <text class="s" x="548" y="88" text-anchor="middle">alerts</text>
+      <path class="wire" d="M630 132 V224" marker-end="url(#wz-ah)" marker-start="url(#wz-pad)"/>
+      <text class="s" x="622" y="182" text-anchor="end">prompt</text>
+      <path class="wire dash" d="M690 224 V136" marker-end="url(#wz-ah)" marker-start="url(#wz-pad)"/>
+      <text class="s" x="698" y="182" text-anchor="start">draft</text>
+      <path class="wire" d="M570 118 H550 V264 H524" marker-end="url(#wz-ah)" marker-start="url(#wz-pad)"/>
+      <text class="s" x="542" y="200" text-anchor="end">feeds</text>
+    </svg>
+  </div>
+            <figcaption>Logs flow left to right: agents → Wazuh → proxy → local model. The dashed line is the drafted write-up coming back.</figcaption>
+          </figure>
+          <!-- TODO(darshan): add a real screenshot here: save it as /portfolio/wazuh-siem/screenshot.png (blur hostnames/IPs first)
+               and replace this placeholder with <figure><img src="screenshot.png" alt="..." width="1600" height="900" loading="lazy"></figure>. -->
+        </section>
+        <section id="broke" aria-labelledby="broke-h">
+          <h2 id="broke-h"><span class="step">04</span>What broke and how I fixed it</h2>
+          <!-- TODO(darshan): replace this with a real problem you hit building the SIEM (agent enrollment, indexer memory,
+               certificates, LLM output quality...). Use the "fault" card format from the Proxmox case study:
+               Symptom / Cause / Fix. -->
+          <p>The write-up of the problems I hit while building this is in progress. The networking faults in the lab that hosts it are documented in the <a href="/portfolio/proxmox-lab/#broke">Proxmox case study</a>.</p>
+        </section>
+        <section id="next" aria-labelledby="next-h">
+          <h2 id="next-h"><span class="step">05</span>What I'd do next</h2>
+          <!-- TODO(darshan): these are suggestions, not things you've said. Keep, edit or replace them. -->
+          <ul>
+            <li>Enroll more endpoints, including a Windows machine, so the alerts cover more than Linux hosts.</li>
+            <li>Map alerts to MITRE ATT&amp;CK techniques in the dashboard to make triage faster.</li>
+            <li>Score the drafted write-ups against my own to see where the local models get things wrong.</li>
+          </ul>
+        </section>
+        <nav class="next-case" aria-label="More case studies">
+          <a href="/portfolio/trail-window/"><span>Previous</span><b>Trail Window</b></a>
+          <a href="/portfolio/proxmox-lab/"><span>Next</span><b>Proxmox home lab</b></a>
+        </nav>
+      </article>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <span class="label">Darshan Sanjel</span>
+      <p>Cybersecurity student in Fairfield, Ohio. Open to IT support, help desk, data center and security roles.</p>
+      <p><a href="mailto:darshan@dragonsmithers.com">darshan@dragonsmithers.com</a></p>
+    </div>
+    <div>
+      <span class="label">Repair</span>
+      <ul>
+        <li><a href="/#rates">Rates</a></li>
+        <li><a href="/business/">Business IT</a></li>
+        <li><a href="/#quote">Get a quote</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="label">Darshan</span>
+      <ul>
+        <li><a href="/portfolio/">Portfolio</a></li>
+        <li><a href="/portfolio/#resume">Résumé</a></li>
+        <li><a href="https://github.com/sanjeldarshan65-afk" rel="noopener">GitHub</a></li>
+      </ul>
+    </div>
+    <div class="legal">
+      <span>© <span data-year>2026</span> Darshan Sanjel</span>
+      <a href="/privacy/">Privacy</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

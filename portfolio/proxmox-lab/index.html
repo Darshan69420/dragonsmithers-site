@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-wsmnxD6kqdZZ/V2wQ85d92sMux2lvh7NN1y5/Y5SS5c=' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://cloudflareinsights.com; form-action 'self' https://api.web3forms.com; base-uri 'self'; object-src 'none'; frame-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <title>Proxmox home lab | Darshan Sanjel</title>
+  <meta name="description" content="Case study: a Proxmox VE 9 home lab on a repurposed 64 GB laptop with LXC, Docker, Pi-hole, LVM-thin snapshots, TOTP, Tailscale and an RTX 3060 local LLM, plus the network faults I traced.">
+  <link rel="canonical" href="https://dragonsmithers.com/portfolio/proxmox-lab/">
+  <meta name="theme-color" content="#f2f4f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a120e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preload" href="/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/site.js" defer></script>
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="DragonSmiths">
+  <meta property="og:title" content="Proxmox home lab | Darshan Sanjel">
+  <meta property="og:description" content="Case study: a Proxmox VE 9 home lab on a repurposed 64 GB laptop with LXC, Docker, Pi-hole, LVM-thin snapshots, TOTP, Tailscale and an RTX 3060 local LLM, plus the network faults I traced.">
+  <meta property="og:url" content="https://dragonsmithers.com/portfolio/proxmox-lab/">
+  <meta property="og:image" content="https://dragonsmithers.com/og/proxmox-lab.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Proxmox home lab: case study by Darshan Sanjel">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Proxmox home lab | Darshan Sanjel">
+  <meta name="twitter:description" content="Case study: a Proxmox VE 9 home lab on a repurposed 64 GB laptop with LXC, Docker, Pi-hole, LVM-thin snapshots, TOTP, Tailscale and an RTX 3060 local LLM, plus the network faults I traced.">
+  <meta name="twitter:image" content="https://dragonsmithers.com/og/proxmox-lab.png">
+  <meta name="twitter:image:alt" content="Proxmox home lab: case study by Darshan Sanjel">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Proxmox home lab",
+    "description": "Case study: a Proxmox VE 9 home lab on a repurposed 64 GB laptop with LXC, Docker, Pi-hole, LVM-thin snapshots, TOTP, Tailscale and an RTX 3060 local LLM, plus the network faults I traced.",
+    "url": "https://dragonsmithers.com/portfolio/proxmox-lab/",
+    "image": "https://dragonsmithers.com/og/proxmox-lab.png",
+    "author": {
+      "@type": "Person",
+      "name": "Darshan Sanjel",
+      "url": "https://dragonsmithers.com/portfolio/"
+    }
+  }
+  </script>
+</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="/portfolio/"><img src="/favicon.svg" alt="" width="30" height="30">Darshan Sanjel</a>
+    <div class="nav">
+      <nav class="menu" aria-label="Main">
+        <a href="/portfolio/#projects" aria-current="page">Projects</a>
+        <a href="/portfolio/#resume" class="opt2">Résumé</a>
+        <a href="/portfolio/#contact" class="opt">Contact</a>
+        <a href="/" class="opt">Repair service</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Color theme: Auto. Change theme"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg><span>Auto</span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-head" aria-labelledby="page-title">
+    <div class="wrap">
+      <ol class="crumbs"><li><a href="/portfolio/">Portfolio</a></li><li><a href="/portfolio/#projects">Projects</a></li><li aria-current="page">Proxmox home lab</li></ol>
+      <span class="label">Case study</span>
+      <h1 id="page-title">A repurposed laptop running my whole lab.</h1>
+      <p class="lede">Proxmox VE 9 hosting VMs, containers, network-wide DNS filtering and a GPU-accelerated local LLM, reachable from anywhere without opening a single port.</p>
+      <dl class="case-meta">
+        <div><dt>Status</dt><dd>Ongoing</dd></div>
+        <div><dt>Hypervisor</dt><dd>Proxmox VE 9</dd></div>
+        <div><dt>Workloads</dt><dd>VMs · LXC · Docker</dd></div>
+        <div><dt>Access</dt><dd>Tailscale · TOTP</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="band">
+    <div class="wrap case">
+      <nav class="toc" aria-label="On this page">
+        <a href="#problem">The problem</a>
+        <a href="#setup">Setup</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#broke">What broke</a>
+        <a href="#next">What I'd do next</a>
+      </nav>
+      <article class="case-body">
+        <section id="problem" aria-labelledby="problem-h">
+          <h2 id="problem-h"><span class="step">01</span>The problem</h2>
+          <!-- TODO(darshan): put the "why" in your own words. This paragraph is a starting point. -->
+          <p>I needed somewhere to run security tools, network services and local AI models, all at once, without buying a server. And I needed to reach it from outside the house without exposing anything to the internet.</p>
+        </section>
+        <section id="setup" aria-labelledby="setup-h">
+          <h2 id="setup-h"><span class="step">02</span>Setup</h2>
+          <ul>
+            <li><strong>Proxmox VE 9</strong> on a repurposed laptop with 64 GB of RAM, running Linux VMs and LXC containers, plus Docker.</li>
+            <li><strong>TOTP two-factor login</strong> on the Proxmox web interface.</li>
+            <li><strong>Pi-hole</strong> in its own LXC for network-wide DNS filtering, using Cloudflare as the upstream resolver. Before installing it I took an <strong>LVM-thin snapshot</strong> as a rollback point.</li>
+            <li>A <strong>GPU-accelerated LLM</strong> with a web UI on an <strong>RTX 3060</strong>.</li>
+            <li><strong>Tailscale</strong> mesh VPN for remote access, so no ports are forwarded on the home router.</li>
+          </ul>
+        </section>
+        <section id="architecture" aria-labelledby="arch-h">
+          <h2 id="arch-h"><span class="step">03</span>Architecture</h2>
+          <figure class="diagram">
+  <div class="scroll" tabindex="0" role="region" aria-label="Proxmox home lab architecture (scrolls sideways on small screens)">
+    <svg viewBox="0 0 760 360" role="img" aria-labelledby="px-title px-desc">
+      <title id="px-title">Proxmox home lab architecture</title>
+      <desc id="px-desc">Home devices send DNS queries to a Pi-hole container, which forwards allowed queries to Cloudflare. A Proxmox VE 9 host runs VMs, LXC containers, Docker and a GPU-accelerated LLM. Remote devices reach the lab over a Tailscale mesh VPN instead of open ports.</desc>
+      <defs>
+        <marker id="px-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="pad" d="M0 0L10 5L0 10z"/></marker>
+        <marker id="px-pad" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"><circle class="pad" cx="5" cy="5" r="4"/></marker>
+      </defs>
+      <rect class="zone" x="10" y="10" width="520" height="340" rx="6"/>
+      <text class="z" x="22" y="30"></text>
+      <rect class="box" x="30" y="50" width="220" height="72" rx="4"/>
+      <text class="t" x="44" y="76">Pi-hole (LXC)</text>
+      <text class="s" x="44" y="96">DNS filtering</text>
+      <rect class="box" x="290" y="50" width="220" height="72" rx="4"/>
+      <text class="t" x="304" y="76">Linux VMs</text>
+      <text class="s" x="304" y="96">e.g. Wazuh SIEM</text>
+      <rect class="box" x="30" y="150" width="220" height="72" rx="4"/>
+      <text class="t" x="44" y="176">Docker</text>
+      <text class="s" x="44" y="196">containers</text>
+      <rect class="box hot" x="290" y="150" width="220" height="72" rx="4"/>
+      <text class="t" x="304" y="176">Local LLM + web UI</text>
+      <text class="s" x="304" y="196">RTX 3060 GPU</text>
+      <rect class="box" x="30" y="250" width="480" height="72" rx="4"/>
+      <text class="t" x="44" y="276">LVM-thin storage</text>
+      <text class="s" x="44" y="296">snapshots before risky changes</text>
+      <text class="s" x="22" y="344" text-anchor="start">Proxmox VE 9 host · 64 GB RAM · TOTP login</text>
+      <rect class="box" x="570" y="50" width="170" height="72" rx="4"/>
+      <text class="t" x="584" y="76">Cloudflare DNS</text>
+      <text class="s" x="584" y="96">upstream resolver</text>
+      <rect class="box" x="570" y="150" width="170" height="72" rx="4"/>
+      <text class="t" x="584" y="176">Home devices</text>
+      <text class="s" x="584" y="196">phones · laptops · TVs</text>
+      <rect class="box" x="570" y="250" width="170" height="72" rx="4"/>
+      <text class="t" x="584" y="276">Remote device</text>
+      <text class="s" x="584" y="296">via Tailscale</text>
+      <path class="wire" d="M570 186 H550 V137 H140 V126" marker-end="url(#px-ah)" marker-start="url(#px-pad)"/>
+      <text class="s" x="544" y="160" text-anchor="end">DNS</text>
+      <path class="wire dash" d="M200 50 V40 H655 V46" marker-end="url(#px-ah)" marker-start="url(#px-pad)"/>
+      <text class="s" x="430" y="34" text-anchor="middle">allowed queries</text>
+      <path class="wire" d="M570 286 H514" marker-end="url(#px-ah)" marker-start="url(#px-pad)"/>
+      <text class="s" x="542" y="278" text-anchor="middle">tailnet</text>
+    </svg>
+  </div>
+            <figcaption>Everything runs on one host. DNS from the house goes through Pi-hole; remote access only arrives over the Tailscale tailnet.</figcaption>
+          </figure>
+          <!-- TODO(darshan): add a real screenshot here: save it as /portfolio/proxmox-lab/screenshot.png (blur hostnames/IPs first)
+               and replace this placeholder with <figure><img src="screenshot.png" alt="..." width="1600" height="900" loading="lazy"></figure>. -->
+        </section>
+        <section id="broke" aria-labelledby="broke-h">
+          <h2 id="broke-h"><span class="step">04</span>What broke and how I fixed it</h2>
+          <div class="fault">
+            <h3>Fault 1: the lab kept dropping off the network</h3>
+            <dl>
+              <dt>Symptom</dt><dd>Intermittent outages: the host and its services became unreachable.</dd>
+              <dt>Cause</dt><dd>A static-IP misconfiguration on the host.</dd>
+              <!-- TODO(darshan): describe exactly what was wrong (duplicate IP? wrong gateway/netmask? DHCP overlap?) and what you changed. -->
+              <dt>Fix</dt><dd>Corrected the host's static addressing.</dd>
+            </dl>
+          </div>
+          <div class="fault">
+            <h3>Fault 2: a slow, flaky link</h3>
+            <dl>
+              <dt>Symptom</dt><dd>Poor throughput and intermittent carrier drops.</dd>
+              <dt>Cause</dt><dd>The USB Ethernet adapter was negotiating at 100 Mb/s instead of gigabit and losing carrier.</dd>
+              <!-- TODO(darshan): add how you found it (ethtool? dmesg? journalctl?) and what fixed it (new adapter, cable, port?). -->
+              <dt>Fix</dt><dd>Traced the problem to the adapter's link negotiation.</dd>
+            </dl>
+          </div>
+          <p><strong>What I took from it:</strong> when a whole host "goes down," check the boring layers first: addressing, then the physical link, before blaming the software running on top.</p>
+        </section>
+        <section id="next" aria-labelledby="next-h">
+          <h2 id="next-h"><span class="step">05</span>What I'd do next</h2>
+          <!-- TODO(darshan): these are suggestions, not things you've said. Keep, edit or replace them. -->
+          <ul>
+            <li>Replace the USB Ethernet adapter with a more reliable NIC and segment lab traffic onto its own VLAN.</li>
+            <li>Automate backups of VMs and containers to a second disk, and test a restore.</li>
+            <li>Point Proxmox and Pi-hole logs at the Wazuh SIEM.</li>
+          </ul>
+        </section>
+        <nav class="next-case" aria-label="More case studies">
+          <a href="/portfolio/wazuh-siem/"><span>Previous</span><b>Wazuh SIEM lab</b></a>
+          <a href="/portfolio/trail-window/"><span>Next</span><b>Trail Window</b></a>
+        </nav>
+      </article>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <span class="label">Darshan Sanjel</span>
+      <p>Cybersecurity student in Fairfield, Ohio. Open to IT support, help desk, data center and security roles.</p>
+      <p><a href="mailto:darshan@dragonsmithers.com">darshan@dragonsmithers.com</a></p>
+    </div>
+    <div>
+      <span class="label">Repair</span>
+      <ul>
+        <li><a href="/#rates">Rates</a></li>
+        <li><a href="/business/">Business IT</a></li>
+        <li><a href="/#quote">Get a quote</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="label">Darshan</span>
+      <ul>
+        <li><a href="/portfolio/">Portfolio</a></li>
+        <li><a href="/portfolio/#resume">Résumé</a></li>
+        <li><a href="https://github.com/sanjeldarshan65-afk" rel="noopener">GitHub</a></li>
+      </ul>
+    </div>
+    <div class="legal">
+      <span>© <span data-year>2026</span> Darshan Sanjel</span>
+      <a href="/privacy/">Privacy</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
