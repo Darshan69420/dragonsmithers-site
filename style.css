@@ -471,7 +471,7 @@ form.quote { display: grid; gap: 18px; background: var(--surface); border: 1px s
 .resume section > h4 { margin: 0; font: 600 12px/1.6 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .resume .entry + .entry { margin-top: 14px; }
 .resume .entry b { font-family: var(--display); font-variation-settings: "wdth" 108; }
-.resume .entry .when { font: 13px var(--mono); color: var(--muted); }
+.resume .entry .when { display: block; font: 13px/1.5 var(--mono); color: var(--muted); }
 .resume ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 3px; }
 .resume ul li::marker { color: var(--copper); }
 .resume p, .resume li { font-size: 15.5px; }
