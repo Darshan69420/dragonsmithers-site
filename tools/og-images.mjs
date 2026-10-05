@@ -12,7 +12,7 @@ const tmp = mkdtempSync(join(tmpdir(), 'og-'));
 mkdirSync(join(root, 'og'), { recursive: true });
 
 const cards = [
-  { file: 'home', kicker: 'Computer & network repair · Butler County, OH', title: ['Your computer, fixed by', 'someone down the street.'], foot: 'Hamilton · Fairfield · West Chester · Liberty Twp · Oxford · Trenton' },
+  { file: 'home', kicker: 'Phone, computer & network repair · Butler County, OH', title: ['Your tech, fixed by', 'someone down the street.'], foot: 'Hamilton · Fairfield · West Chester · Liberty Twp · Oxford · Trenton' },
   { file: 'business', kicker: 'Small-business IT plan', title: ['IT for small offices that', "don't have an IT person."], foot: 'Google Workspace · Email deliverability · Backups · 2-step login' },
   { file: 'privacy', kicker: 'DragonSmiths', title: ['Privacy:', 'no ads, no tracking cookies.'], foot: 'dragonsmithers.com/privacy' },
   { file: 'portfolio', kicker: 'Cybersecurity · IT support · Systems & networking', title: ['Darshan Sanjel'], foot: 'Wazuh SIEM · Proxmox VE lab · Help desk · Fairfield, OH', brand: 'Portfolio' },
