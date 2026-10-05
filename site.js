@@ -37,10 +37,23 @@ const FORM_KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
   };
   const saved = store.get('theme');
   applyTheme(modes.includes(saved) ? saved : 'system');
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
   $$('.theme-toggle').forEach((btn) => btn.addEventListener('click', () => {
     const next = modes[(modes.indexOf(btn.dataset.mode || 'system') + 1) % modes.length];
     store.set('theme', next === 'system' ? null : next);
-    applyTheme(next);
+    if (!document.startViewTransition || calm.matches) { applyTheme(next); return; }
+    // Circular reveal that grows out of the toggle, so the change visibly comes from what was clicked.
+    const r = btn.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const root = document.documentElement;
+    root.classList.add('theme-vt');
+    const vt = document.startViewTransition(() => applyTheme(next));
+    vt.ready.then(() => root.animate(
+      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+      { duration: 520, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', pseudoElement: '::view-transition-new(root)' },
+    )).catch(() => {});
+    vt.finished.finally(() => root.classList.remove('theme-vt'));
   }));
 
   /* Click-to-copy (any button with data-copy) */
@@ -191,6 +204,80 @@ const FORM_KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
     window.print();
   }));
   window.addEventListener('afterprint', () => document.body.classList.remove('print-resume'));
+
+  /* ---- Motion (all of it is skipped for prefers-reduced-motion) ---- */
+  const header = $('.top');
+  const onScroll = () => header && header.classList.toggle('is-scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Number children so CSS can stagger them (style properties set via CSSOM are allowed by the CSP).
+  const stagger = (els, cap = 8) => els.forEach((el, i) => el.style.setProperty('--i', Math.min(i, cap)));
+  $$('.traces').forEach((svg) => {
+    stagger($$('path:not(.sig):not(.pad)', svg));
+    stagger($$('.sig', svg));
+    stagger($$('.pad', svg));
+  });
+  $$('.diagram').forEach((fig) => { stagger($$('.wire', fig), 12); stagger($$('.sig', fig), 12); });
+
+  const REVEAL = [
+    '.band-head', '.rate', '.flow', '.job', '.slot', '.creds > div', '.review-copy', '.review-slot',
+    '.faq details', 'form.quote', '.towns li', '.proj', '.spec-wrap', '.history > div', '.resume',
+    '.checklist li', '.plan > aside', '.case-body > section', '.fault', '.diagram', '.features li',
+    '.learning .item', '.next-case', '.prose > *', '.lost .ticket',
+  ].join(',');
+  const targets = $$(REVEAL);
+  if (!calm.matches && 'IntersectionObserver' in window) {
+    const groups = new Map();
+    targets.forEach((el) => {
+      el.dataset.reveal = '';
+      const sibs = groups.get(el.parentElement) || [];
+      sibs.push(el);
+      groups.set(el.parentElement, sibs);
+    });
+    groups.forEach((sibs) => sibs.forEach((el, i) => el.style.setProperty('--i', Math.min(i, 8))));
+    // Anything already on screen is shown as-is, so nothing above the fold ever flashes.
+    // Read every position first, then write, so this costs one layout instead of one per element.
+    const fold = innerHeight;
+    const onScreen = targets.map((el) => el.getBoundingClientRect().top < fold);
+    targets.forEach((el, i) => onScreen[i] && el.classList.add('in'));
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+    }), { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    targets.forEach((el) => !el.classList.contains('in') && io.observe(el));
+    document.documentElement.classList.add('reveal-ready');
+  } else {
+    targets.forEach((el) => el.classList.add('in'));
+  }
+
+  // Pointer glow on the intake ticket.
+  $$('.intake').forEach((card) => {
+    let raf = 0;
+    card.addEventListener('pointermove', (e) => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        card.style.setProperty('--my', `${e.clientY - r.top}px`);
+        raf = 0;
+      });
+    });
+  });
+
+  // Case-study table of contents follows the section you're reading.
+  const toc = $$('.toc a');
+  if (toc.length && 'IntersectionObserver' in window) {
+    const byId = new Map(toc.map((a) => [a.hash.slice(1), a]));
+    const spy = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      toc.forEach((a) => { a.classList.remove('is-active'); a.removeAttribute('aria-current'); });
+      const a = byId.get(en.target.id);
+      if (a) { a.classList.add('is-active'); a.setAttribute('aria-current', 'location'); }
+    }), { rootMargin: '-35% 0px -60% 0px' });
+    byId.forEach((_, id) => { const s = document.getElementById(id); if (s) spy.observe(s); });
+  }
 
   /* Privacy-friendly analytics, only when a token is configured */
   if (CF_ANALYTICS_TOKEN) {

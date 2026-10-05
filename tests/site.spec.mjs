@@ -7,6 +7,18 @@ const SCHEMES = ['light', 'dark'];
 // Links to files Darshan still has to add. Remove an entry once the file exists.
 const KNOWN_PENDING = new Set(['/resume.pdf']);
 
+/** Scroll through the page so every scroll-reveal has played, then let the last fades finish. */
+async function settle(page) {
+  await page.evaluate(async () => {
+    for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight / 2) {
+      scrollTo({ top: y, behavior: 'instant' });
+      await new Promise((r) => setTimeout(r, 60));
+    }
+    scrollTo({ top: 0, behavior: 'instant' });
+  });
+  await page.waitForTimeout(900);
+}
+
 /** Fail on console errors and uncaught exceptions. External requests are stubbed so tests run offline. */
 async function watch(page) {
   const errors = [];
@@ -36,6 +48,7 @@ for (const scheme of SCHEMES) {
       test(`${path} has no serious or critical axe issues`, async ({ page }) => {
         await watch(page);
         await page.goto(path);
+        await settle(page);
         const { violations } = await new AxeBuilder({ page })
           .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
           .analyze();
@@ -211,4 +224,28 @@ test('no phone numbers or street addresses leak onto the site', async ({ request
     const text = html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ');
     expect(text, path).not.toMatch(/\(?\b\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b/);
   }
+});
+
+test.describe('motion', () => {
+  test('reduced-motion users get every section visible with no reveal states', async ({ browser }) => {
+    const ctx = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await ctx.newPage();
+    for (const path of PAGES) {
+      await page.goto(path);
+      await expect(page.locator('html')).not.toHaveClass(/reveal-ready/);
+      const hidden = await page.$$eval('[data-reveal]', (els) => els.filter((e) => getComputedStyle(e).opacity !== '1').length);
+      expect(hidden, path).toBe(0);
+    }
+    await ctx.close();
+  });
+
+  test('every reveal target is fully visible after scrolling through', async ({ page }) => {
+    await watch(page);
+    for (const path of PAGES) {
+      await page.goto(path);
+      await settle(page);
+      const stuck = await page.$$eval('[data-reveal]', (els) => els.filter((e) => !e.classList.contains('in') || getComputedStyle(e).opacity !== '1').map((e) => e.className || e.tagName));
+      expect(stuck, path).toEqual([]);
+    }
+  });
 });

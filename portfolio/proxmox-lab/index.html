@@ -144,12 +144,14 @@
       <rect class="box" x="570" y="250" width="170" height="72" rx="4"/>
       <text class="t" x="584" y="276">Remote device</text>
       <text class="s" x="584" y="296">via Tailscale</text>
-      <path class="wire" d="M570 186 H550 V137 H140 V126" marker-end="url(#px-ah)" marker-start="url(#px-pad)"/>
+      <path class="wire draw" d="M570 186 H550 V137 H140 V126" pathLength="1" marker-end="url(#px-ah)" marker-start="url(#px-pad)"/>
       <text class="s" x="544" y="160" text-anchor="end">DNS</text>
       <path class="wire dash" d="M200 50 V40 H655 V46" marker-end="url(#px-ah)" marker-start="url(#px-pad)"/>
       <text class="s" x="430" y="34" text-anchor="middle">allowed queries</text>
-      <path class="wire" d="M570 286 H514" marker-end="url(#px-ah)" marker-start="url(#px-pad)"/>
+      <path class="wire draw" d="M570 286 H514" pathLength="1" marker-end="url(#px-ah)" marker-start="url(#px-pad)"/>
       <text class="s" x="542" y="278" text-anchor="middle">tailnet</text>
+      <path class="sig" d="M570 186 H550 V137 H140 V126" pathLength="1"/>
+      <path class="sig" d="M570 286 H514" pathLength="1"/>
     </svg>
   </div>
             <figcaption>Everything runs on one host. DNS from the house goes through Pi-hole; remote access only arrives over the Tailscale tailnet.</figcaption>
