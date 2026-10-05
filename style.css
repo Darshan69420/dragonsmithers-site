@@ -612,3 +612,153 @@ form.quote { display: grid; gap: 18px; background: var(--surface); border: 1px s
 .diagram .scroll:focus-visible { outline-offset: 2px; }
 figure.review-slot { margin: 0; }
 .review-slot blockquote { margin: 0; color: var(--ink); font-size: 18px; }
+
+/* ===== Motion =====
+   Rules (from the ui-ux-pro-max motion guide): transform/opacity only, every animation means something,
+   1–2 moving focal points per view, reveals 8–16px over 400–600ms, 40ms staggers capped at 8 items,
+   exits faster than entrances, never block input. Everything here sits behind
+   prefers-reduced-motion: no-preference, so reduced-motion users get the final state instantly. */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast: 160ms;
+  --t-base: 280ms;
+  --t-reveal: 560ms;
+}
+
+/* Hero traces: copper lines drawn from the board edge into the work order, then a signal pulse runs along them */
+.hero-art { position: relative; min-width: 0; }
+.hero-art .ticket { position: relative; z-index: 1; }
+.traces { position: absolute; inset: -56px -40px -48px -64px; width: calc(100% + 104px); height: calc(100% + 104px); max-width: none; z-index: 0; pointer-events: none; overflow: visible; }
+.hero { overflow-x: clip; }
+.traces path { fill: none; stroke: var(--copper); stroke-width: 0.45; stroke-linecap: round; stroke-linejoin: round; opacity: 0.5; }
+.traces .sig { stroke-width: 0.8; opacity: 0; stroke-dasharray: 0.06 1.2; }
+.traces .pad { stroke-width: 2; opacity: 0.85; }
+@media (max-width: 900px) { .traces { display: none; } }
+.u-solder { background: linear-gradient(var(--copper), var(--copper)) no-repeat 0 92% / 100% 0.065em; padding-bottom: 0.02em; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Cross-page transitions (Chromium): header stays put, page content swaps with a short rise */
+  @view-transition { navigation: auto; }
+  .top { view-transition-name: site-header; }
+  main { view-transition-name: page; }
+  ::view-transition-old(page) { animation: vt-out 160ms var(--ease-in) both; }
+  ::view-transition-new(page) { animation: vt-in 320ms var(--ease-out) both; }
+  @keyframes vt-out { to { opacity: 0; transform: translateY(-6px); } }
+  @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+
+  /* Hero: traces draw in, pads light, signal runs three times then stops (no endless motion) */
+  .traces path:not(.sig):not(.pad) { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace-draw 900ms var(--ease-out) forwards; animation-delay: calc(200ms + var(--i, 0) * 140ms); }
+  .traces .pad { opacity: 0; animation: pad-on 360ms var(--ease-out) forwards; animation-delay: calc(900ms + var(--i, 0) * 140ms); }
+  .traces .sig { animation: signal 1.6s linear 3; animation-delay: calc(1300ms + var(--i, 0) * 260ms); }
+  @keyframes trace-draw { to { stroke-dashoffset: 0; } }
+  @keyframes pad-on { to { opacity: 0.85; } }
+  @keyframes signal { 0% { stroke-dashoffset: 1.25; opacity: 0; } 10% { opacity: 1; } 85% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+
+  .hero-art .ticket { animation: ticket-in 700ms var(--ease-out) 120ms both; }
+  @keyframes ticket-in { from { opacity: 0; transform: translateY(-18px) rotate(4deg); } }
+  @media (max-width: 900px) { @keyframes ticket-in { from { opacity: 0; transform: translateY(14px); } } }
+  .u-solder { animation: solder 900ms var(--ease-out) 500ms both; }
+  @keyframes solder { from { background-size: 0% 0.065em; } }
+  .hero .facts li::before { animation: led 1.2s ease-in-out 3; animation-delay: calc(1.4s + var(--i, 0) * 200ms); }
+  .hero .facts li:nth-child(2)::before { --i: 1; }
+  .hero .facts li:nth-child(3)::before { --i: 2; }
+  @keyframes led { 50% { opacity: 0.35; } }
+
+  /* Scroll reveal. Hidden state only exists once site.js has marked what is already on screen. */
+  html.reveal-ready [data-reveal]:not(.in) { opacity: 0; transform: translateY(14px); }
+  html.reveal-ready [data-reveal] { transition: opacity var(--t-reveal) var(--ease-out), transform var(--t-reveal) var(--ease-out); transition-delay: calc(var(--i, 0) * 45ms); }
+
+  /* Process: the track "charges" stage by stage once the row is on screen */
+  .flow .track::after { content: ""; position: absolute; inset: 0; background: var(--copper); transform: scaleX(0); transform-origin: left; }
+  .flow.in .track::after { animation: charge 520ms var(--ease-out) forwards; }
+  .flow.in li:nth-child(1) .track::after { animation-delay: 300ms; }
+  .flow.in li:nth-child(2) .track::after { animation-delay: 820ms; }
+  .flow.in li:nth-child(3) .track::after { animation-delay: 1340ms; }
+  .flow .pill i { transition: transform var(--t-base) var(--ease-spring), background-color var(--t-base); }
+  .flow.in li .pill i { animation: pill-on 420ms var(--ease-spring) both; }
+  .flow.in li:nth-child(2) .pill i { animation-delay: 520ms; }
+  .flow.in li:nth-child(3) .pill i { animation-delay: 1040ms; }
+  .flow.in li:nth-child(4) .pill i { animation-delay: 1560ms; }
+  @keyframes charge { to { transform: scaleX(1); } }
+  @keyframes pill-on { from { transform: scale(0); } 60% { transform: scale(1.6); } to { transform: scale(1); } }
+
+  /* Job log: the stamp lands after the ticket arrives (the job is done) */
+  .job.in .stamp { animation: stamp 520ms var(--ease-spring) 420ms both; }
+  @keyframes stamp { from { opacity: 0; transform: scale(1.8) rotate(-12deg); } to { opacity: 1; transform: scale(1) rotate(-3deg); } }
+  .job.in .ba .after b { animation: tick-in 500ms var(--ease-out) 300ms both; }
+  @keyframes tick-in { from { opacity: 0; transform: translateY(8px); } }
+
+  /* Case-study diagrams: wires draw source → destination, then one signal pass */
+  .diagram .wire.draw { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
+  .diagram.in .wire.draw { animation: wire-draw 800ms var(--ease-out) forwards; animation-delay: calc(250ms + var(--i, 0) * 160ms); }
+  .diagram .wire.dash { opacity: 0; }
+  .diagram.in .wire.dash { animation: fade-in 500ms ease forwards; animation-delay: calc(250ms + var(--i, 0) * 160ms); }
+  .diagram .sig { fill: none; stroke: var(--copper); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 0.04 1.2; opacity: 0; }
+  .diagram.in .sig { animation: signal 1.4s linear 2; animation-delay: calc(1400ms + var(--i, 0) * 220ms); }
+  .diagram .box { transition: fill var(--t-base); }
+  @keyframes fade-in { to { opacity: 1; } }
+  @keyframes wire-draw { 0% { opacity: 0; stroke-dashoffset: 1; } 12% { opacity: 1; } 100% { opacity: 1; stroke-dashoffset: 0; } }
+
+  /* Micro-interactions: quick, small, and on transform only */
+  .btn { transition: transform var(--t-fast) var(--ease-out), background-color var(--t-base), color var(--t-base), border-color var(--t-base); position: relative; overflow: hidden; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0) scale(0.97); transition-duration: 80ms; }
+  .btn.solid::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--board-copper) 38%, transparent) 50%, transparent 65%); transform: translateX(-120%); pointer-events: none; }
+  .btn.solid:hover::after { transform: translateX(120%); transition: transform 700ms var(--ease-out); }
+  .devices a { transition: transform var(--t-fast) var(--ease-out), border-color var(--t-base), background-color var(--t-base); }
+  .devices a:hover { transform: translateY(-2px); }
+  .devices a:active { transform: scale(0.97); }
+  .devices a svg { transition: transform var(--t-base) var(--ease-spring); }
+  .devices a:hover svg { transform: scale(1.15) rotate(-6deg); }
+  .menu a { transition: color var(--t-fast), box-shadow var(--t-base); }
+  .copy-btn, .theme-toggle { transition: border-color var(--t-base), transform var(--t-fast) var(--ease-out); }
+  .copy-btn:active, .theme-toggle:active { transform: scale(0.94); }
+  .theme-toggle svg { transition: transform 500ms var(--ease-spring); }
+  .theme-toggle:hover svg { transform: rotate(180deg); }
+  .top { transition: box-shadow var(--t-base), background-color var(--t-base); }
+  .proj .links a.case::after { display: inline-block; transition: transform var(--t-base) var(--ease-spring); }
+  .proj .links a.case:hover::after { transform: translateX(4px); }
+  .toc a { transition: color var(--t-fast), border-color var(--t-base), padding-left var(--t-base) var(--ease-out); }
+  .next-case a b { transition: color var(--t-fast); }
+
+  /* FAQ: answers slide open instead of snapping (Chromium 131+, others snap as before) */
+  @supports (interpolate-size: allow-keywords) {
+    :root { interpolate-size: allow-keywords; }
+    .faq details::details-content { block-size: 0; overflow: clip; transition: block-size 320ms var(--ease-out), content-visibility 320ms allow-discrete; }
+    .faq details[open]::details-content { block-size: auto; }
+  }
+  .faq summary::after { transition: transform var(--t-base) var(--ease-spring), background-color var(--t-base); }
+  .faq details[open] summary::after { transform: rotate(180deg); }
+
+  /* Portfolio datasheet: one scan pass across the part line, status LED blinks a few times */
+  .part { position: relative; overflow: hidden; }
+  .part::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 30%; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--copper) 22%, transparent), transparent); transform: translateX(-110%); animation: scan 1.6s var(--ease-out) 400ms 1 forwards; pointer-events: none; }
+  @keyframes scan { to { transform: translateX(380%); } }
+  .part .ok::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); margin-right: 6px; vertical-align: 1px; animation: led 1.4s ease-in-out 1s 4; }
+
+  .quickbar { transition: transform 260ms var(--ease-out), visibility 260ms; }
+  .quickbar.is-hidden { transition-duration: 180ms; transition-timing-function: var(--ease-in); }
+}
+
+/* Pointer glow on the intake card (fine pointers only) */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .intake::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity var(--t-base);
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--copper) 13%, transparent), transparent 70%);
+  }
+  .intake:hover::before { opacity: 1; }
+  .intake > * { position: relative; }
+}
+
+.top.is-scrolled { box-shadow: 0 8px 24px -18px color-mix(in srgb, var(--ink) 55%, transparent); }
+.toc a.is-active { color: var(--ink); border-color: var(--copper); padding-left: 16px; }
+
+/* Theme switch uses a circular reveal from the toggle (View Transitions); the old/new snapshots must not crossfade */
+html.theme-vt::view-transition-old(root), html.theme-vt::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+html.theme-vt .top, html.theme-vt main { view-transition-name: none; }
+
+@media print { .traces { display: none; } }
+.job .ba b { white-space: nowrap; }
+@media (max-width: 400px) { .job .ba b { font-size: 19px; } .job .ba > div { padding: 12px; } }
