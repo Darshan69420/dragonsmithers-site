@@ -1,0 +1,16 @@
+{
+  "name": "DragonSmiths Tech Repair",
+  "short_name": "DragonSmiths",
+  "description": "Computer and network repair around Hamilton and Fairfield, Ohio.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#f2f4f0",
+  "theme_color": "#0e4a33",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "/icon-maskable-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ]
+}
