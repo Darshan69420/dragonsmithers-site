@@ -163,20 +163,26 @@ test.describe('quote form', () => {
   });
 });
 
-test('theme toggle cycles and persists without a flash', async ({ page }) => {
+test('site is dark-only: no theme toggle, dark in a light-preferring browser, stale choice cleared', async ({ browser }) => {
+  const ctx = await browser.newContext({ colorScheme: 'light' });
+  const page = await ctx.newPage();
   await watch(page);
   await page.goto('/');
-  const toggle = page.locator('.theme-toggle');
-  await expect(toggle).toHaveAttribute('aria-label', /Auto/);
-  await toggle.click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await toggle.click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  // The inline head script must apply the saved theme before the stylesheet paints.
-  await page.goto('/portfolio/', { waitUntil: 'commit' });
-  await page.waitForSelector('html[data-theme="dark"]');
-  await page.locator('.theme-toggle').click();
-  await expect(page.locator('html')).not.toHaveAttribute('data-theme', /./);
+  await page.evaluate(() => localStorage.setItem('theme', 'light'));
+  await page.reload();
+  await expect(page.locator('.theme-toggle')).toHaveCount(0);
+  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  expect(bg).toBe('rgb(10, 6, 7)');
+  expect(await page.evaluate(() => localStorage.getItem('theme'))).toBeNull();
+  await ctx.close();
+});
+
+test('hero loops pause when the hero scrolls off screen', async ({ page }) => {
+  await watch(page);
+  await page.goto('/');
+  await expect(page.locator('.hero')).not.toHaveClass(/is-idle/);
+  await page.locator('#faq').scrollIntoViewIfNeeded();
+  await expect(page.locator('.hero')).toHaveClass(/is-idle/);
 });
 
 test('copy button copies the email address', async ({ page, context }) => {

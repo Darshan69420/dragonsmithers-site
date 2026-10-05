@@ -21,40 +21,9 @@ const FORM_KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
   /* Footer year */
   $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
 
-  /* Theme toggle: system -> light -> dark -> system. The <head> snippet applies the saved
-     choice before first paint, so this only handles clicks. */
-  const modes = ['system', 'light', 'dark'];
-  const names = { system: 'Auto', light: 'Light', dark: 'Dark' };
-  const applyTheme = (mode) => {
-    const root = document.documentElement;
-    if (mode === 'system') delete root.dataset.theme; else root.dataset.theme = mode;
-    $$('.theme-toggle').forEach((btn) => {
-      btn.dataset.mode = mode;
-      btn.setAttribute('aria-label', `Color theme: ${names[mode]}. Change theme`);
-      const label = $('span', btn);
-      if (label) label.textContent = names[mode];
-    });
-  };
-  const saved = store.get('theme');
-  applyTheme(modes.includes(saved) ? saved : 'system');
+  /* The site is dark-only now; forget any light/dark choice saved by the old theme toggle. */
+  if (store.get('theme')) store.set('theme', null);
   const calm = matchMedia('(prefers-reduced-motion: reduce)');
-  $$('.theme-toggle').forEach((btn) => btn.addEventListener('click', () => {
-    const next = modes[(modes.indexOf(btn.dataset.mode || 'system') + 1) % modes.length];
-    store.set('theme', next === 'system' ? null : next);
-    if (!document.startViewTransition || calm.matches) { applyTheme(next); return; }
-    // Circular reveal that grows out of the toggle, so the change visibly comes from what was clicked.
-    const r = btn.getBoundingClientRect();
-    const x = r.left + r.width / 2, y = r.top + r.height / 2;
-    const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    const root = document.documentElement;
-    root.classList.add('theme-vt');
-    const vt = document.startViewTransition(() => applyTheme(next));
-    vt.ready.then(() => root.animate(
-      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
-      { duration: 520, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', pseudoElement: '::view-transition-new(root)' },
-    )).catch(() => {});
-    vt.finished.finally(() => root.classList.remove('theme-vt'));
-  }));
 
   /* Click-to-copy (any button with data-copy) */
   $$('[data-copy]').forEach((btn) => {
@@ -213,11 +182,11 @@ const FORM_KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
 
   // Number children so CSS can stagger them (style properties set via CSSOM are allowed by the CSP).
   const stagger = (els, cap = 8) => els.forEach((el, i) => el.style.setProperty('--i', Math.min(i, cap)));
-  $$('.traces').forEach((svg) => {
-    stagger($$('path:not(.sig):not(.pad)', svg));
-    stagger($$('.sig', svg));
-    stagger($$('.pad', svg));
-  });
+  // The hero's ember and eye loops pause whenever the hero is off screen (saves battery, cuts distraction).
+  const hero = $('.hero');
+  if (hero && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([en]) => hero.classList.toggle('is-idle', !en.isIntersecting)).observe(hero);
+  }
   $$('.diagram').forEach((fig) => { stagger($$('.wire', fig), 12); stagger($$('.sig', fig), 12); });
 
   const REVEAL = [
