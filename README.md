@@ -13,8 +13,8 @@ privacy/index.html          Privacy notice
 portfolio/index.html        Portfolio + HTML résumé
 portfolio/<slug>/index.html Case studies (wazuh-siem, proxmox-lab, trail-window)
 404.html                    "Ticket not found"
-style.css                   The whole design system (tokens at the top)
-site.js                     Theme toggle, copy buttons, quote form, mobile quote bar, analytics
+style.css                   The whole design system: Ember palette tokens at the top, motion at the bottom
+site.js                     Scroll reveals, copy buttons, quote form, mobile quote bar, analytics
 fonts/                      Self-hosted, subset Archivo + IBM Plex Mono (OFL)
 og/                         1200×630 social cards
 CNAME                       dragonsmithers.com (don't touch)
@@ -67,7 +67,7 @@ Once you have a real job, delete the sample.
 1. Copy `portfolio/trail-window/` to `portfolio/<new-slug>/` and rewrite the text. Keep the five sections:
    problem, setup, architecture, what broke, what's next.
 2. The diagram is inline SVG. Use the classes `box`, `box hot`, `zone`, `wire`, `wire dash`, `t`, `s`
-   and `z` so it follows the light/dark theme automatically. Give every marker id a unique prefix.
+   and `z` so it picks up the site's colors automatically. Give every marker id a unique prefix.
 3. Update the "Previous / Next" links at the bottom of the neighboring case studies.
 4. Link it from the project in `portfolio/index.html` with `<a href="/portfolio/<new-slug>/" class="case">`.
 5. Add it to `sitemap.xml`, to `PAGES` in `tests/site.spec.mjs`, and give it an OG card in
@@ -81,7 +81,7 @@ If you add an inline `<script>`, the Content-Security-Policy meta tag will block
 
 ```sh
 npm install
-npm test            # Playwright: every page at 390/768/1280 in light + dark, links, form, axe
+npm test            # Playwright: every page at 390/768/1280, links, form, motion, axe
 npm run lhci        # Lighthouse CI (start `npm run serve` in another terminal first)
 node tools/audit.mjs http://localhost:8080 audit-out   # full audit with screenshots (start `npm run serve` first)
 ```
