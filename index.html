@@ -2,132 +2,206 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>DragonSmiths Tech Repair | Hamilton &amp; Fairfield, OH</title>
-  <meta name="description" content="Local computer repair, custom PC builds, home networking and small-business IT in Hamilton and Fairfield, Ohio.">
+  <meta name="description" content="Computer repair, custom PC builds, home Wi-Fi and small-business IT in Hamilton and Fairfield, Ohio. Free diagnosis, firm quote before any work.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<header class="nav">
+<header class="top">
   <div class="wrap">
-    <a class="brand" href="/"><img src="/favicon.svg" alt="" width="28" height="28">DragonSmiths</a>
-    <nav class="nav-links">
-      <a href="#services">Services</a>
-      <a href="#how" class="hide-sm">How it works</a>
-      <a href="#contact">Contact</a>
-      <a href="/portfolio/">Portfolio</a>
+    <a class="mark" href="/"><img src="/favicon.svg" alt="" width="30" height="30">DragonSmiths</a>
+    <nav class="menu" aria-label="Main">
+      <a href="#rates">Rates</a>
+      <a href="#process" class="opt">How it works</a>
+      <a href="#quote">Get a quote</a>
+      <a href="/portfolio/">About me</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <div class="hero">
+  <section class="hero">
     <div class="wrap">
-      <div class="eyebrow">Hamilton · Fairfield · Butler County, OH</div>
-      <h1>Local tech repair,<br><span class="hl">forged right.</span></h1>
-      <p class="lead">Slow PC, dead Wi-Fi, virus pop-ups, or a gaming rig you want built? DragonSmiths fixes computers and networks for homes and small businesses, with straight answers and no upselling.</p>
-      <div class="cta">
-        <a class="btn primary" href="#contact">Get a free quote</a>
-        <a class="btn" href="#services">See services</a>
+      <div class="copy">
+        <span class="label">Computer &amp; network repair · Butler County, OH</span>
+        <h1>Your computer, fixed by someone down the street.</h1>
+        <p class="lede">Slow laptops, dead Wi-Fi, malware, broken screens and custom PC builds for homes and small businesses around Hamilton and Fairfield. I diagnose it for free and give you a firm price before touching anything.</p>
+        <div class="actions">
+          <a class="btn solid" href="#quote">Get a free quote</a>
+          <a class="btn" href="#rates">See the rates</a>
+        </div>
+        <p class="fineprint"><strong>Free diagnosis.</strong> If I can't fix it, you don't pay.</p>
       </div>
-      <div class="badges">
-        <span class="badge">Google Cloud Cybersecurity Certificate</span>
-        <span class="badge">Free diagnosis</span>
-        <span class="badge">No fix, no fee</span>
-        <span class="badge">Pickup &amp; on-site available</span>
-      </div>
-    </div>
-  </div>
 
-  <section id="services">
+      <figure class="ticket" aria-label="Sample work order">
+        <div class="ticket-head">
+          <b>Work order</b>
+          <span class="num">No. 0412 · sample</span>
+        </div>
+        <dl>
+          <dt>Device</dt><dd>Dell Inspiron 15 laptop</dd>
+          <dt>Complaint</dt><dd>"Takes forever to turn on."</dd>
+          <dt>Diagnosis</dt><dd>Failing hard drive. SMART shows 1,204 reallocated sectors.</dd>
+          <dt>Fix</dt><dd>Cloned to a 500 GB SSD, kept every file</dd>
+          <dt>Boot time</dt><dd class="before-after"><s class="num">4 min 10 s</s><span>→</span><b class="num">19 s</b></dd>
+          <dt>Quote</dt><dd class="num">$39 labor + $45 SSD</dd>
+        </dl>
+        <span class="stamp">Ready for pickup</span>
+        <p class="ticket-note">Example of the write-up you get back with every job.</p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band" id="rates">
     <div class="wrap">
-      <h2>Services</h2>
-      <p class="sub">Prices are starting points. You get a firm quote before any work begins.</p>
-      <div class="grid">
-        <div class="card">
-          <div class="icon">🛠️</div>
-          <h3>PC &amp; Laptop Repair</h3>
-          <p>Diagnosis, slow-computer tune-ups, OS reinstalls, screen, battery and fan replacements.</p>
-          <div class="price">from $49</div>
+      <div class="band-head">
+        <h2>Rate board</h2>
+        <p>Starting prices for the most common jobs. After the free diagnosis you get one firm number, and parts are billed at cost.</p>
+      </div>
+      <div class="rates">
+        <div class="rate">
+          <h3>Repair &amp; tune-up</h3>
+          <p>Slow computer cleanup, Windows reinstall, fan and battery swaps, screen replacement.</p>
+          <div class="price">$49<small>starting</small></div>
         </div>
-        <div class="card">
-          <div class="icon">🛡️</div>
-          <h3>Virus &amp; Malware Removal</h3>
-          <p>Cleanup, browser hijack removal, and a security check so it doesn't happen again.</p>
-          <div class="price">from $59</div>
+        <div class="rate">
+          <h3>Virus &amp; malware removal</h3>
+          <p>Pop-ups, browser hijacks and scareware removed, plus a security check so it doesn't come back.</p>
+          <div class="price">$59<small>starting</small></div>
         </div>
-        <div class="card">
-          <div class="icon">⚡</div>
-          <h3>Upgrades &amp; Data Transfer</h3>
-          <p>SSD and RAM upgrades, cloning your old drive, moving files to a new computer.</p>
-          <div class="price">from $39 + parts</div>
+        <div class="rate">
+          <h3>SSD / RAM upgrade</h3>
+          <p>The cheapest way to make an older computer feel new. Drive cloned, nothing lost.</p>
+          <div class="price">$39<small>+ parts</small></div>
         </div>
-        <div class="card">
-          <div class="icon">🎮</div>
-          <h3>Custom PC Builds</h3>
-          <p>Gaming or workstation builds to your budget: part picking, assembly, cable management, stress testing.</p>
-          <div class="price">from $99 labor</div>
+        <div class="rate">
+          <h3>Data transfer</h3>
+          <p>Photos, documents and accounts moved from your old computer to the new one.</p>
+          <div class="price">$49<small>starting</small></div>
         </div>
-        <div class="card">
-          <div class="icon">📶</div>
-          <h3>Home Wi-Fi &amp; Networking</h3>
-          <p>Dead zones fixed, mesh Wi-Fi installs, router setup and hardening, parental controls, ad blocking.</p>
-          <div class="price">from $69</div>
+        <div class="rate">
+          <h3>Custom PC build</h3>
+          <p>Gaming or workstation build to your budget: parts list, assembly, cable management, stress test.</p>
+          <div class="price">$99<small>labor</small></div>
         </div>
-        <div class="card">
-          <div class="icon">🏢</div>
-          <h3>Small-Business IT</h3>
-          <p>Google Workspace setup, business email that doesn't land in spam, backups, account security, monthly support plans.</p>
-          <div class="price">from $50/mo</div>
+        <div class="rate">
+          <h3>Home Wi-Fi &amp; network</h3>
+          <p>Dead zones, mesh installs, router setup and lockdown, parental controls, network-wide ad blocking.</p>
+          <div class="price">$69<small>starting</small></div>
         </div>
+        <div class="rate">
+          <h3>Small-business IT</h3>
+          <p>Google Workspace, business email that doesn't land in spam, backups, 2-step login for staff.</p>
+          <div class="price">$50<small>per month</small></div>
+        </div>
+      </div>
+      <p class="rates-foot">Drop-off or on-site visits. On-site jobs outside Hamilton and Fairfield may add a small trip fee, quoted up front.</p>
+    </div>
+  </section>
+
+  <section class="band" id="process">
+    <div class="wrap">
+      <div class="band-head">
+        <h2>What happens to your device</h2>
+        <p>Every job follows the same four stages, and you hear from me at each one.</p>
+      </div>
+      <ol class="flow">
+        <li><span class="pill"><i></i>Received</span><span class="track"></span><p>Drop it off or I come to you. Tell me what it's doing, and send a photo of any error if you have one.</p></li>
+        <li><span class="pill"><i></i>Diagnosed</span><span class="track"></span><p>I find the actual cause and send you one firm price. Diagnosis is free.</p></li>
+        <li><span class="pill"><i></i>Approved</span><span class="track"></span><p>No work starts until you say yes. Most jobs are done in 1 to 3 days.</p></li>
+        <li><span class="pill"><i></i>Ready</span><span class="track"></span><p>You get it back with a written note on what was wrong and what I changed.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band board">
+    <div class="wrap">
+      <div class="band-head">
+        <h2>Who's fixing it</h2>
+        <p>I'm Darshan, a cybersecurity student in Fairfield. I fix computers for neighbors and run my own servers at home for practice. <a href="/portfolio/">More about me</a>.</p>
+      </div>
+      <div class="creds">
+        <div><span class="label">Certified</span><b>Google Cloud Cybersecurity Certificate</b><p>CompTIA A+ and Security+ in progress.</p></div>
+        <div><span class="label">Experience</span><b>University IT help desk</b><p>Hands-on support for students, faculty and staff at Miami University Regionals.</p></div>
+        <div><span class="label">Your data</span><b>Nothing copied, nothing kept</b><p>Your files stay on your device. I only open what the repair needs.</p></div>
       </div>
     </div>
   </section>
 
-  <section id="how">
-    <div class="wrap">
-      <h2>How it works</h2>
-      <p class="sub">Simple, local and upfront.</p>
-      <div class="steps">
-        <div class="step"><h3>Reach out</h3><p>Email what's going on. A photo of any error message helps.</p></div>
-        <div class="step"><h3>Free diagnosis</h3><p>I figure out the actual problem and give you a firm price.</p></div>
-        <div class="step"><h3>Fix</h3><p>Work only starts after you approve the quote. Most jobs take 1–3 days.</p></div>
-        <div class="step"><h3>Done right</h3><p>You get your device back with a short note on what was done. No fix, no fee.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="why">
+  <section class="band" id="quote">
     <div class="wrap split">
       <div>
-        <h2>Why DragonSmiths</h2>
-        <p class="sub">A local tech who works on systems for a living and for fun.</p>
-        <ul class="check">
-          <li>Cybersecurity student with a Google Cloud Cybersecurity Certificate</li>
-          <li>University IT help desk experience</li>
-          <li>Runs a home lab with servers, firewalls, and a security monitoring (SIEM) stack</li>
-          <li>Your data stays private. Nothing is copied or kept.</li>
-          <li>Plain-English explanations, no jargon</li>
+        <h2>Get a free quote</h2>
+        <p class="muted" style="color:var(--muted);margin:14px 0 0">Fill this in and it opens an email to me with the details already written. Or just email me directly.</p>
+        <div class="email-line" style="margin-top:18px">
+          <code id="addr">darshan@dragonsmithers.com</code>
+          <button class="copy-btn" type="button" id="copyBtn">Copy</button>
+        </div>
+        <span class="label" style="display:block;margin-top:36px">Service area</span>
+        <ul class="towns">
+          <li>Hamilton <span>45011 · 45013 · 45015</span></li>
+          <li>Fairfield <span>45014</span></li>
+          <li>West Chester <span>45069</span></li>
+          <li>Liberty Twp <span>45044</span></li>
+          <li>Oxford <span>45056</span></li>
+          <li>Trenton <span>45067</span></li>
         </ul>
       </div>
-      <div class="contact-box" id="contact">
-        <h2>Get a free quote</h2>
-        <p>Email me with your device, the problem, and your town. I usually reply the same day.</p>
-        <p><a class="btn primary" href="mailto:darshan@dragonsmithers.com?subject=Repair%20quote">Email darshan@dragonsmithers.com</a></p>
-        <p class="mono" style="font-size:14px;margin-bottom:0">Serving Hamilton, Fairfield, West Chester, Oxford, Liberty Twp &amp; nearby.</p>
-      </div>
+
+      <form class="quote" id="quoteForm" novalidate>
+        <div class="row2">
+          <div class="field"><label for="q-name">Your name</label><input id="q-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="q-town">Town</label><input id="q-town" name="town" placeholder="Hamilton" autocomplete="address-level2"></div>
+        </div>
+        <div class="field">
+          <label for="q-device">Device</label>
+          <select id="q-device" name="device">
+            <option>Windows laptop</option>
+            <option>Windows desktop</option>
+            <option>Mac</option>
+            <option>Custom PC build</option>
+            <option>Wi-Fi / home network</option>
+            <option>Business IT</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field"><label for="q-issue">What's going on?</label><textarea id="q-issue" name="issue" placeholder="It takes 5 minutes to boot and the fan is loud." required></textarea></div>
+        <button class="btn solid" type="submit">Open email with my request</button>
+      </form>
     </div>
   </section>
 </main>
 
-<footer>
+<footer class="foot">
   <div class="wrap">
-    <span>© <span id="y"></span> DragonSmiths · Hamilton/Fairfield, OH</span>
-    <a href="/portfolio/">Darshan Sanjel, portfolio →</a>
+    <span>© <span id="y"></span> DragonSmiths · Hamilton &amp; Fairfield, Ohio</span>
+    <a href="/portfolio/">Darshan Sanjel, portfolio</a>
   </div>
 </footer>
-<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+  const addr = 'darshan@dragonsmithers.com';
+  document.getElementById('copyBtn').addEventListener('click', async (e) => {
+    const b = e.currentTarget;
+    try { await navigator.clipboard.writeText(addr); b.textContent = 'Copied'; }
+    catch { const r = document.createRange(); r.selectNodeContents(document.getElementById('addr')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected'; }
+    setTimeout(() => b.textContent = 'Copy', 1600);
+  });
+  document.getElementById('quoteForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = e.currentTarget, v = (n) => f.elements[n].value.trim();
+    if (!v('name') || !v('issue')) { (v('name') ? f.elements.issue : f.elements.name).focus(); return; }
+    const subject = `Repair quote: ${v('device')}${v('town') ? ' (' + v('town') + ')' : ''}`;
+    const body = `Name: ${v('name')}\nTown: ${v('town')}\nDevice: ${v('device')}\n\n${v('issue')}`;
+    location.href = `mailto:${addr}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>
 </body>
 </html>
