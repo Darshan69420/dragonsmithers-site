@@ -82,7 +82,7 @@ If you add an inline `<script>`, the Content-Security-Policy meta tag will block
 ```sh
 npm install
 npm test            # Playwright: every page at 390/768/1280 in light + dark, links, form, axe
-npm run lhci        # Lighthouse CI against a local server
+npm run lhci        # Lighthouse CI (start `npm run serve` in another terminal first)
 node tools/audit.mjs http://localhost:8080 audit-out   # full audit with screenshots (start `npm run serve` first)
 ```
 
