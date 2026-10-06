@@ -5,7 +5,7 @@ const PAGES = ['/', '/business/', '/privacy/', '/portfolio/', '/portfolio/wazuh-
 const WIDTHS = [390, 768, 1280];
 const SCHEMES = ['light', 'dark'];
 // Links to files Darshan still has to add. Remove an entry once the file exists.
-const KNOWN_PENDING = new Set(['/resume.pdf']);
+const KNOWN_PENDING = new Set();
 
 /** Scroll through the page so every scroll-reveal has played, then let the last fades finish. */
 async function settle(page) {

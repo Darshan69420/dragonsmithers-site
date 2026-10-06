@@ -559,6 +559,14 @@ form.quote { display: grid; gap: 18px; background: var(--surface); border: 1px s
   body.print-resume main > *:not(#resume) { display: none !important; }
   body.print-resume #resume { padding: 0; }
   body.print-resume #resume .band-head { display: none; }
+  /* Fit the résumé on one Letter page */
+  body.print-resume .resume { gap: 11pt; }
+  body.print-resume .resume header { padding-bottom: 9pt; }
+  body.print-resume .resume section { grid-template-columns: 112pt minmax(0, 1fr); gap: 12pt; }
+  body.print-resume .resume p, body.print-resume .resume li { font-size: 10pt; line-height: 1.38; }
+  body.print-resume .resume .entry + .entry { margin-top: 7pt; }
+  body.print-resume .resume .entry .when { font-size: 8.5pt; }
+  body.print-resume .resume ul { margin-top: 3pt; gap: 1pt; }
   h2, h3 { break-after: avoid; }
   .proj, .history > div, .resume .entry, .fault, .diagram { break-inside: avoid; }
 }

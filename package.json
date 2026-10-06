@@ -7,6 +7,7 @@
     "test": "playwright test",
     "lhci": "lhci autorun",
     "og": "node tools/og-images.mjs",
+    "resume": "node tools/resume-pdf.mjs",
     "fonts": "python3 tools/subset-fonts.py"
   },
   "devDependencies": {

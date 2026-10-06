@@ -8,6 +8,7 @@ and font tools) is for development only and never needed for the site to work.
 
 ```
 index.html                  Repair homepage
+resume.pdf                  One-page résumé, generated from the portfolio (npm run resume)
 business/index.html         Small-business IT plan
 privacy/index.html          Privacy notice
 portfolio/index.html        Portfolio + HTML résumé
@@ -28,15 +29,13 @@ Every unconfirmed fact is marked with an HTML comment. List them all:
 grep -rn "TODO(darshan)" --include=*.html --include=*.js .
 ```
 
-The three that make features work:
+The two that make features work:
 
 1. **Quote form key:** sign up free at [web3forms.com](https://web3forms.com) with
    `darshan@dragonsmithers.com`, then paste the key into `index.html` in place of
    `YOUR_WEB3FORMS_ACCESS_KEY` (search for `access_key`). Until then, the form opens a prefilled email instead.
 2. **Analytics:** paste a Cloudflare Web Analytics token into `CF_ANALYTICS_TOKEN` at the top of `site.js`.
    Leave it empty and no analytics load at all.
-3. **Résumé PDF:** add `resume.pdf` to the repo root. The download buttons already point at `/resume.pdf`.
-   Then remove `/resume.pdf` from `KNOWN_PENDING` in `tests/site.spec.mjs`.
 
 ## Common edits
 
@@ -72,6 +71,11 @@ Once you have a real job, delete the sample.
 4. Link it from the project in `portfolio/index.html` with `<a href="/portfolio/<new-slug>/" class="case">`.
 5. Add it to `sitemap.xml`, to `PAGES` in `tests/site.spec.mjs`, and give it an OG card in
    `tools/og-images.mjs`, then run `npm run og`.
+
+### Update the résumé
+`resume.pdf` is generated from the HTML résumé in `portfolio/index.html`, so edit that, then run
+`npm run resume` and commit both files. The script fails if the résumé no longer fits on one page;
+the print-only sizing lives under `body.print-resume` in `style.css`.
 
 ### Header, footer or `<head>` changes
 Each page carries its own copy (no build step), so change all eight HTML files the same way.
