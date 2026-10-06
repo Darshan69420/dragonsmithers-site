@@ -248,6 +248,198 @@ const FORM_KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
     byId.forEach((_, id) => { const s = document.getElementById(id); if (s) spy.observe(s); });
   }
 
+  /* Portfolio dragon: pointer parallax, embers that rise off its glowing ribbons, crackling arcs,
+     and a roar (shake, shockwave, spark burst) on click or tap. The canvas only runs while the
+     dragon is on screen and the tab is visible. Reduced-motion users get the still art. */
+  const dragon = $('.dragon');
+  if (dragon && !calm.matches) dragonFx(dragon);
+
+  function dragonFx(el) {
+    const canvas = $('.dragon-fx', el);
+    const art = $('.dragon-img', el);
+    const ctx = canvas && canvas.getContext('2d');
+    if (!ctx || !art) return;
+    const COLORS = ['255,74,48', '255,120,64', '255,176,120', '229,57,44', '255,214,180'];
+    const MAX = 280;
+    let w = 0, h = 0, dpr = 1, raf = 0, last = 0, onScreen = false, boost = 0, nextArc = 90;
+    let points = [];
+    const parts = [];
+    const arcs = [];
+
+    // One soft round sprite per color: far cheaper than a gradient or shadowBlur per particle.
+    const sprites = COLORS.map((c) => {
+      const s = document.createElement('canvas');
+      s.width = s.height = 64;
+      const g = s.getContext('2d');
+      const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+      grad.addColorStop(0, 'rgba(255,240,225,1)');
+      grad.addColorStop(0.18, `rgba(${c},0.95)`);
+      grad.addColorStop(0.5, `rgba(${c},0.25)`);
+      grad.addColorStop(1, `rgba(${c},0)`);
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 64, 64);
+      return s;
+    });
+
+    // The canvas overhangs the art (see .dragon-fx in style.css); map art coords (0-1) to canvas pixels.
+    const toX = (u) => ((0.08 + u) / 1.16) * w;
+    const toY = (v) => ((0.12 + v) / 1.18) * h;
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const pick = () => points[(Math.random() * points.length) | 0];
+
+    // Find the bright red ribbon pixels once, so embers and arcs come off the dragon itself.
+    const sample = () => {
+      try {
+        const sw = 160, sh = Math.round((160 * art.naturalHeight) / art.naturalWidth);
+        const off = document.createElement('canvas');
+        off.width = sw; off.height = sh;
+        const g = off.getContext('2d', { willReadFrequently: true });
+        g.drawImage(art, 0, 0, sw, sh);
+        const d = g.getImageData(0, 0, sw, sh).data;
+        for (let y = 0; y < sh; y++) for (let x = 0; x < sw; x++) {
+          const i = (y * sw + x) * 4;
+          if (d[i + 3] > 200 && d[i] > 170 && d[i + 1] < 110) points.push([x / sw, y / sh]);
+        }
+      } catch { /* fall back below */ }
+      if (points.length < 20) points = Array.from({ length: 200 }, () => [rand(0.15, 0.95), rand(0.1, 0.95)]);
+    };
+
+    const ember = () => {
+      const [u, v] = pick();
+      parts.push({ k: 0, x: toX(u), y: toY(v), vx: rand(-0.35, 0.35), vy: rand(-1.4, -0.4), life: 0, max: rand(60, 150), size: rand(3, 9) * dpr, c: (Math.random() * COLORS.length) | 0, ph: rand(0, 6.28) });
+    };
+    const burst = (x, y, n, power = 1) => {
+      for (let i = 0; i < n && parts.length < MAX + 120; i++) {
+        const a = rand(0, Math.PI * 2), sp = rand(2, 9) * power * dpr;
+        parts.push({ k: 1, x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 0, max: rand(28, 60), size: rand(1.2, 2.6) * dpr, c: (Math.random() * COLORS.length) | 0 });
+      }
+    };
+    // A jagged lightning arc between two ribbon points, redrawn with fresh jitter each frame it lives.
+    const arc = () => {
+      const [u1, v1] = pick(), [u2, v2] = pick();
+      arcs.push({ x1: toX(u1), y1: toY(v1), x2: toX(u2), y2: toY(v2), life: 0, max: rand(8, 16) });
+    };
+    const drawArc = (a) => {
+      const segs = 9, dx = a.x2 - a.x1, dy = a.y2 - a.y1, len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
+      const jag = Math.min(40 * dpr, len * 0.12);
+      const fade = 1 - a.life / a.max;
+      ctx.beginPath();
+      ctx.moveTo(a.x1, a.y1);
+      for (let i = 1; i < segs; i++) {
+        const t = i / segs, off = rand(-jag, jag);
+        ctx.lineTo(a.x1 + dx * t + nx * off, a.y1 + dy * t + ny * off);
+      }
+      ctx.lineTo(a.x2, a.y2);
+      ctx.strokeStyle = `rgba(255,60,40,${0.35 * fade})`;
+      ctx.lineWidth = 7 * dpr;
+      ctx.stroke();
+      ctx.strokeStyle = `rgba(255,225,210,${0.9 * fade})`;
+      ctx.lineWidth = 1.4 * dpr;
+      ctx.stroke();
+    };
+
+    const tick = (t) => {
+      raf = requestAnimationFrame(tick);
+      const dt = last ? Math.min(3, (t - last) / 16.67) : 1;
+      last = t;
+      // Fractional spawn rates carry over as a chance, so the average rate holds at any frame rate.
+      let spawn = (boost > 0 ? 4 : 1.3) * dt;
+      for (; spawn >= 1 && parts.length < MAX; spawn--) ember();
+      if (parts.length < MAX && Math.random() < spawn) ember();
+      boost = Math.max(0, boost - dt);
+      if ((nextArc -= dt) <= 0) { arc(); if (Math.random() < 0.4) arc(); nextArc = rand(50, 140); }
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.lineCap = 'round';
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i];
+        p.life += dt;
+        if (p.life >= p.max) { parts.splice(i, 1); continue; }
+        const f = 1 - p.life / p.max;
+        if (p.k === 0) {
+          p.vx += Math.sin(p.ph + p.life * 0.08) * 0.03 * dt;
+          p.x += p.vx * dt * dpr;
+          p.y += p.vy * dt * dpr;
+          const s = p.size * (0.4 + f);
+          ctx.globalAlpha = Math.min(1, f * 1.6) * (p.life < 8 ? p.life / 8 : 1);
+          ctx.drawImage(sprites[p.c], p.x - s, p.y - s, s * 2, s * 2);
+        } else {
+          p.vx *= 0.93 ** dt; p.vy = p.vy * 0.93 ** dt + 0.06 * dt * dpr;
+          const ox = p.x, oy = p.y;
+          p.x += p.vx * dt; p.y += p.vy * dt;
+          ctx.globalAlpha = f;
+          ctx.strokeStyle = `rgb(${COLORS[p.c]})`;
+          ctx.lineWidth = p.size;
+          ctx.beginPath(); ctx.moveTo(ox - p.vx * 2, oy - p.vy * 2); ctx.lineTo(p.x, p.y); ctx.stroke();
+        }
+      }
+      ctx.globalAlpha = 1;
+      for (let i = arcs.length - 1; i >= 0; i--) {
+        const a = arcs[i];
+        if ((a.life += dt) >= a.max) { arcs.splice(i, 1); continue; }
+        drawArc(a);
+      }
+    };
+
+    const run = () => {
+      const go = onScreen && !document.hidden && w > 0;
+      el.classList.toggle('is-idle', !onScreen || document.hidden);
+      if (go && !raf) { last = 0; raf = requestAnimationFrame(tick); }
+      if (!go && raf) { cancelAnimationFrame(raf); raf = 0; }
+    };
+    const size = () => {
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      w = canvas.width = Math.round(canvas.clientWidth * dpr);
+      h = canvas.height = Math.round(canvas.clientHeight * dpr);
+      run();
+    };
+    if ('ResizeObserver' in window) new ResizeObserver(size).observe(canvas); else addEventListener('resize', size);
+    if ('IntersectionObserver' in window) new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; run(); }).observe(el);
+    else onScreen = true;
+    document.addEventListener('visibilitychange', run);
+
+    const ready = art.complete && art.naturalWidth ? Promise.resolve() : new Promise((r) => art.addEventListener('load', r, { once: true }));
+    ready.then(() => {
+      sample();
+      size();
+      // The summon: a spark burst from the head as the dragon fades in.
+      setTimeout(() => { burst(toX(0.82), toY(0.5), 90, 1.2); arc(); arc(); boost = 60; }, 700);
+    });
+
+    // Roar on click or tap, with sparks from wherever it was hit.
+    el.addEventListener('pointerdown', (e) => {
+      const r = canvas.getBoundingClientRect();
+      burst((e.clientX - r.left) * dpr, (e.clientY - r.top) * dpr, 70, 1);
+      burst(toX(0.82), toY(0.5), 50, 1.4);
+      for (let i = 0; i < 4; i++) arc();
+      boost = 45;
+      el.classList.remove('roar');
+      void el.offsetWidth; // restart the CSS roar if it's clicked again mid-roar
+      el.classList.add('roar');
+      clearTimeout(el._roar);
+      el._roar = setTimeout(() => el.classList.remove('roar'), 950);
+    });
+
+    // Parallax: the dragon leans toward the pointer anywhere in the header (mouse and pen only).
+    const headEl = el.closest('.sheet-head');
+    if (headEl && matchMedia('(pointer: fine)').matches) {
+      let pending = 0;
+      headEl.addEventListener('pointermove', (e) => {
+        if (pending) return;
+        pending = requestAnimationFrame(() => {
+          pending = 0;
+          const r = el.getBoundingClientRect();
+          const px = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width / 1.2)));
+          const py = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height / 1.2)));
+          el.style.setProperty('--px', px.toFixed(3));
+          el.style.setProperty('--py', py.toFixed(3));
+        });
+      });
+      headEl.addEventListener('pointerleave', () => { el.style.setProperty('--px', 0); el.style.setProperty('--py', 0); });
+    }
+  }
+
   /* Privacy-friendly analytics, only when a token is configured */
   if (CF_ANALYTICS_TOKEN) {
     const s = document.createElement('script');
