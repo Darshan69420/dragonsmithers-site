@@ -8,13 +8,17 @@ and font tools) is for development only and never needed for the site to work.
 
 ```
 index.html                  Repair homepage
+resume.pdf                  One-page résumé, generated from the portfolio (npm run resume)
 business/index.html         Small-business IT plan
 privacy/index.html          Privacy notice
 portfolio/index.html        Portfolio + HTML résumé
 portfolio/<slug>/index.html Case studies (wazuh-siem, proxmox-lab, trail-window)
 404.html                    "Ticket not found"
 style.css                   The whole design system: Ember palette tokens at the top, motion at the bottom
-site.js                     Scroll reveals, copy buttons, quote form, mobile quote bar, analytics
+site.js                     Scroll reveals, copy buttons, quote form, mobile quote bar, analytics, Ember chat
+pet.js                      Ember's 3D dragon (three.js bundle, generated from src/pet.js by npm run pet)
+src/pet.js                  Source for the 3D dragon
+img/                        Portfolio dragon art (responsive sizes, baked glow, sheen mask)
 fonts/                      Self-hosted, subset Archivo + IBM Plex Mono (OFL)
 og/                         1200×630 social cards
 CNAME                       dragonsmithers.com (don't touch)
@@ -28,15 +32,13 @@ Every unconfirmed fact is marked with an HTML comment. List them all:
 grep -rn "TODO(darshan)" --include=*.html --include=*.js .
 ```
 
-The three that make features work:
+The two that make features work:
 
 1. **Quote form key:** sign up free at [web3forms.com](https://web3forms.com) with
    `darshan@dragonsmithers.com`, then paste the key into `index.html` in place of
    `YOUR_WEB3FORMS_ACCESS_KEY` (search for `access_key`). Until then, the form opens a prefilled email instead.
 2. **Analytics:** paste a Cloudflare Web Analytics token into `CF_ANALYTICS_TOKEN` at the top of `site.js`.
    Leave it empty and no analytics load at all.
-3. **Résumé PDF:** add `resume.pdf` to the repo root. The download buttons already point at `/resume.pdf`.
-   Then remove `/resume.pdf` from `KNOWN_PENDING` in `tests/site.spec.mjs`.
 
 ## Common edits
 
@@ -72,6 +74,23 @@ Once you have a real job, delete the sample.
 4. Link it from the project in `portfolio/index.html` with `<a href="/portfolio/<new-slug>/" class="case">`.
 5. Add it to `sitemap.xml`, to `PAGES` in `tests/site.spec.mjs`, and give it an OG card in
    `tools/og-images.mjs`, then run `npm run og`.
+
+### Update the résumé
+`resume.pdf` is generated from the HTML résumé in `portfolio/index.html`, so edit that, then run
+`npm run resume` and commit both files. The script fails if the résumé no longer fits on one page;
+the print-only sizing lives under `body.print-resume` in `style.css`.
+
+### Ember (the portfolio dragon and site guide)
+On `/portfolio/` pages, `site.js` adds an "Ask Ember" button and chat panel. Answers are scripted from
+the `KB` list in `site.js` (search for `const KB`): each entry has keywords and an answer. Keep it to facts
+that are on the site. Nothing typed is sent anywhere.
+
+After the page loads, a 3D dragon (`pet.js`) wakes up and becomes Ember's body: it coils in the header,
+follows the cursor (or a tap on phones), and roars and opens the chat when clicked. It stays asleep for
+reduced-motion visitors, on devices without a real GPU, and for anyone who tells it to "sleep" in the chat;
+those visitors get the animated 2D art in the header instead.
+
+To change the 3D dragon, edit `src/pet.js` and run `npm run pet`, then commit both files.
 
 ### Header, footer or `<head>` changes
 Each page carries its own copy (no build step), so change all eight HTML files the same way.

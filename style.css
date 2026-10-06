@@ -559,6 +559,14 @@ form.quote { display: grid; gap: 18px; background: var(--surface); border: 1px s
   body.print-resume main > *:not(#resume) { display: none !important; }
   body.print-resume #resume { padding: 0; }
   body.print-resume #resume .band-head { display: none; }
+  /* Fit the résumé on one Letter page */
+  body.print-resume .resume { gap: 11pt; }
+  body.print-resume .resume header { padding-bottom: 9pt; }
+  body.print-resume .resume section { grid-template-columns: 112pt minmax(0, 1fr); gap: 12pt; }
+  body.print-resume .resume p, body.print-resume .resume li { font-size: 10pt; line-height: 1.38; }
+  body.print-resume .resume .entry + .entry { margin-top: 7pt; }
+  body.print-resume .resume .entry .when { font-size: 8.5pt; }
+  body.print-resume .resume ul { margin-top: 3pt; gap: 1pt; }
   h2, h3 { break-after: avoid; }
   .proj, .history > div, .resume .entry, .fault, .diagram { break-inside: avoid; }
 }
@@ -781,6 +789,7 @@ figure.review-slot { margin: 0; }
 
 /* Portfolio header: lab status terminal (real stack only) */
 .sheet-intro { align-items: center; }
+.sheet-intro .intro-copy { align-self: start; }
 .intro-copy { display: grid; gap: 24px; }
 .sheet-intro .intro-copy .actions { justify-content: flex-start; }
 .term { margin: 0; background: #0D0809; border: 1px solid #3A2224; border-radius: 10px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(229, 57, 44, 0.5); min-width: 0; }
@@ -794,7 +803,8 @@ figure.review-slot { margin: 0; }
 .term-body em { color: var(--molten); font-style: normal; }
 .term-body .cursor { display: inline-block; width: 9px; height: 16px; background: var(--copper); vertical-align: -3px; }
 @media (prefers-reduced-motion: no-preference) {
-  .term-body .l { animation: fade-in 1ms steps(1) both; }
+  /* steps(1, start): a 1ms jump-end step can land a rounding error short of the end and stay hidden in Chromium */
+  .term-body .l { animation: fade-in 1ms steps(1, start) both; }
   .term-body .l:nth-child(1) { animation-delay: 0.5s; }
   .term-body .l:nth-child(2) { animation-delay: 1.1s; }
   .term-body .l:nth-child(3) { animation-delay: 1.7s; }
@@ -804,3 +814,117 @@ figure.review-slot { margin: 0; }
   .term-body .cursor { animation: led 1s steps(1) 3.2s 10; }
   .term { animation: ticket-in 800ms var(--ease-out) 150ms both; }
 }
+
+/* ===== Portfolio dragon =====
+   Layers, back to front: aura, shockwave rings, blurred glow copy, the art, a light sheen masked to the
+   art's shape, an eye glint, then the particle canvas (drawn by site.js). .dragon carries the pointer
+   parallax (--px/--py), .dragon-body carries the float, so the two never fight over one transform.
+   Reduced-motion users get the still art: every animation and the canvas are behind no-preference. */
+.sheet-head { position: relative; isolation: isolate; overflow-x: clip; }
+.sheet-head::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(760px 520px at 76% 46%, rgba(179, 32, 26, 0.28), transparent 70%); }
+.dragon-stage { position: relative; min-width: 0; }
+.dragon { position: relative; width: 112%; margin: -40px -6% 0; aspect-ratio: 600 / 493; transform: translate3d(calc(var(--px, 0) * 14px), calc(var(--py, 0) * 10px), 0) rotate(calc(var(--px, 0) * 2deg)); transition: transform 600ms var(--ease-out); cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
+.dragon-body, .dragon-body img, .dragon-sheen, .dragon-fx, .dragon-aura { position: absolute; inset: 0; }
+.dragon-body img { width: 100%; height: 100%; display: block; }
+.dragon-img { filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.6)); }
+.dragon-glow { position: absolute; inset: -12.2% -10%; background: url(/img/dragon-glow.webp) center / 100% 100% no-repeat; opacity: 0.32; } /* pre-blurred art, padded 20px around 200px */
+.dragon-aura { inset: 6% 4% 0 18%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 64, 40, 0.42), rgba(179, 32, 26, 0.16) 55%, transparent); }
+.dragon-ring { position: absolute; left: 80%; top: 50%; width: 46%; aspect-ratio: 1; margin: -23% 0 0 -23%; border-radius: 50%; border: 2px solid var(--ember); box-shadow: 0 0 24px var(--ember), inset 0 0 18px rgba(229, 57, 44, 0.6); opacity: 0; pointer-events: none; }
+.dragon-sheen { -webkit-mask: url(/img/dragon-mask.webp) center / 100% 100% no-repeat; mask: url(/img/dragon-mask.webp) center / 100% 100% no-repeat; overflow: hidden; mix-blend-mode: screen; }
+.dragon-sheen i { position: absolute; top: -20%; bottom: -20%; left: 0; width: 26%; background: linear-gradient(100deg, transparent, rgba(255, 190, 160, 0.85) 50%, transparent); transform: translateX(-140%) skewX(-18deg); opacity: 0; }
+.dragon-glint { position: absolute; left: 82%; top: 52%; width: 16%; aspect-ratio: 1; margin: -8% 0 0 -8%; opacity: 0; mix-blend-mode: screen; pointer-events: none;
+  background: radial-gradient(closest-side, #fff 0, #ffb59a 12%, rgba(255, 60, 40, 0.5) 32%, transparent 70%),
+    linear-gradient(90deg, transparent 0, rgba(255, 200, 180, 0.9) 50%, transparent 100%) center / 100% 3px no-repeat,
+    linear-gradient(0deg, transparent 0, rgba(255, 200, 180, 0.7) 50%, transparent 100%) center / 3px 70% no-repeat; }
+.dragon-fx { inset: -12% -8% -6%; width: 116%; height: 118%; pointer-events: none; }
+.dragon-stage .term { position: relative; z-index: 1; margin: -24% 0 0 auto; width: 88%; }
+@media (max-width: 900px) {
+  .dragon { width: 100%; margin: -8px 0 0; }
+  .dragon-stage .term { width: 100%; margin-top: -18%; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dragon { animation: dragon-summon 1.5s var(--ease-out) 0.1s backwards; }
+  .dragon-body { animation: dragon-float 7s ease-in-out 1.6s infinite; }
+  .dragon-glow { animation: dragon-pulse 3.2s ease-in-out 1.6s infinite; }
+  .dragon-aura { animation: dragon-aura 4.4s ease-in-out infinite; }
+  .dragon-ring { animation: dragon-ring 4.8s cubic-bezier(0.2, 0.7, 0.3, 1) infinite; }
+  .dragon-ring:nth-child(2) { animation-delay: 0.35s; }
+  .dragon-ring:nth-child(3) { animation-delay: 1.6s; }
+  .dragon-ring:nth-child(4) { animation-delay: 3.2s; }
+  .dragon-sheen i { animation: dragon-sheen 6s ease-in-out 1.8s infinite; }
+  .dragon-glint { animation: dragon-glint 5s ease-in-out 1.2s infinite; }
+  /* Click or tap: the dragon roars (shake, flare, fast rings). site.js adds .roar and sparks. */
+  .dragon.roar .dragon-body { animation: dragon-roar 700ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+  .dragon.roar .dragon-glow { animation: dragon-flare 900ms ease-out; }
+  .dragon.roar .dragon-ring { animation: dragon-ring 900ms cubic-bezier(0.2, 0.7, 0.3, 1); }
+  .dragon.roar .dragon-ring:nth-child(3) { animation-delay: 120ms; }
+  .dragon.roar .dragon-ring:nth-child(4) { animation-delay: 240ms; }
+  .dragon.roar .dragon-glint { animation: dragon-glint 900ms ease-out; }
+  .dragon.is-idle, .dragon.is-idle * { animation-play-state: paused !important; }
+  @keyframes dragon-summon {
+    0% { opacity: 0; transform: translateY(40px) scale(0.8); filter: blur(14px) brightness(3) saturate(0); }
+    55% { opacity: 1; filter: blur(0) brightness(1.8) saturate(1.4); }
+    100% { opacity: 1; filter: none; }
+  }
+  @keyframes dragon-float { 50% { transform: translateY(-16px) rotate(-1.4deg); } }
+  @keyframes dragon-pulse { 50% { opacity: 0.7; } }
+  @keyframes dragon-aura { 50% { transform: scale(1.08); opacity: 0.7; } }
+  @keyframes dragon-ring { 0% { transform: scale(0.15); opacity: 0.95; } 100% { transform: scale(2.6); opacity: 0; } }
+  @keyframes dragon-sheen { 0%, 55% { transform: translateX(-140%) skewX(-18deg); opacity: 0; } 58% { opacity: 1; } 85%, 100% { transform: translateX(480%) skewX(-18deg); opacity: 0; } }
+  @keyframes dragon-glint { 0%, 70%, 100% { opacity: 0; transform: scale(0.3) rotate(0); } 80% { opacity: 1; transform: scale(1.15) rotate(45deg); } 90% { opacity: 0.6; transform: scale(0.8) rotate(90deg); } }
+  @keyframes dragon-roar { 10%, 90% { transform: translate(-2px, 1px) rotate(-0.6deg); } 20%, 80% { transform: translate(4px, -2px) rotate(0.8deg) scale(1.02); } 30%, 50%, 70% { transform: translate(-7px, 2px) rotate(-1.2deg) scale(1.04); } 40%, 60% { transform: translate(7px, -3px) rotate(1.2deg) scale(1.04); } }
+  @keyframes dragon-flare { 0% { opacity: 1; transform: scale(1.08); } 100% { opacity: 0.32; } }
+}
+@media print { .dragon { display: none; } .dragon-stage .term { margin-top: 0; width: 100%; } }
+
+/* ===== Ember: 3D dragon pet + site guide =====
+   The WebGL canvas is opaque black and screen-blended, so only the dragon's light shows on the page.
+   It never takes pointer events: site.js and pet.js hit-test the dragon themselves. */
+.ember-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 15; pointer-events: none; mix-blend-mode: screen; opacity: 0; transition: opacity 900ms var(--ease-out); }
+.ember-canvas.is-on { opacity: 1; }
+/* With the 3D dragon awake, the 2D art steps aside (it keeps its box, which is the 3D dragon's perch). */
+.pet-on .dragon { opacity: 0; visibility: hidden; transition: opacity 700ms var(--ease-out), visibility 0s 700ms; }
+.ember-bubble { position: fixed; left: 0; top: 0; z-index: 31; max-width: 220px; padding: 9px 13px; border-radius: 12px; background: var(--surface); border: 1px solid #4A2C2E; color: var(--ink); font: 600 14px/1.35 var(--body); box-shadow: 0 12px 30px -12px rgba(229, 57, 44, 0.6); pointer-events: none; opacity: 0; transform: translate(calc(var(--x, -999px) - 50%), calc(var(--y, -999px) - 100%)) scale(0.9); transition: opacity 200ms ease, transform 200ms var(--ease-out); }
+.ember-bubble.is-on { opacity: 1; transform: translate(calc(var(--x, -999px) - 50%), calc(var(--y, -999px) - 100%)); }
+.ember-bubble::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 10px; height: 10px; background: var(--surface); border: solid #4A2C2E; border-width: 0 1px 1px 0; transform: translateX(-50%) rotate(45deg); }
+
+.ember-launch { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 30; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px 0 12px; border-radius: 999px; border: 1px solid #5A2E2C; background: color-mix(in srgb, var(--surface) 92%, transparent); color: var(--ink); font: 700 15px/1 var(--body); cursor: pointer; box-shadow: 0 10px 30px -10px rgba(229, 57, 44, 0.7); transition: transform var(--t-fast) ease, border-color var(--t-fast) ease; }
+@supports (backdrop-filter: blur(8px)) { .ember-launch { backdrop-filter: blur(8px); } }
+.ember-launch:hover { transform: translateY(-2px); border-color: var(--ember); }
+.ember-launch:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+.ember-launch[aria-expanded="true"] { border-color: var(--ember); }
+
+.ember-panel { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 60px); z-index: 30; width: min(380px, calc(100vw - 32px)); max-height: min(560px, calc(100vh - 120px)); display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; background: var(--surface); border: 1px solid #4A2C2E; border-radius: 16px; box-shadow: 0 30px 80px -24px rgba(229, 57, 44, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.4); overflow: hidden; }
+.ember-panel[hidden] { display: none; }
+.ember-panel header { display: flex; align-items: center; gap: 12px; padding: 14px 14px 12px 16px; border-bottom: 1px solid var(--line); }
+.ember-panel header div { flex: 1; min-width: 0; }
+.ember-panel h2 { font-size: 18px; margin: 0; line-height: 1.2; }
+.ember-panel header p { margin: 2px 0 0; font: 12px/1.4 var(--mono); color: var(--muted); }
+.ember-x { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--muted); cursor: pointer; }
+.ember-x:hover { color: var(--ink); border-color: var(--line); }
+.ember-x svg { width: 18px; height: 18px; }
+.ember-log { overflow-y: auto; padding: 14px 16px; display: grid; align-content: start; gap: 10px; overscroll-behavior: contain; }
+.ember-log:focus-visible { outline: 2px solid var(--copper); outline-offset: -2px; }
+.ember-msg { margin: 0; padding: 10px 13px; border-radius: 12px; font-size: 15px; line-height: 1.45; max-width: 92%; }
+.ember-msg.bot { background: var(--sunk); border: 1px solid var(--line); color: var(--ink); border-top-left-radius: 4px; }
+.ember-msg.me { justify-self: end; background: var(--fire); color: #fff; border-top-right-radius: 4px; }
+.ember-msg a { color: var(--copper); }
+.ember-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 10px; }
+.ember-chips button { min-height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid #4A2C2E; background: none; color: var(--ink); font: 600 13px/1 var(--body); cursor: pointer; }
+.ember-chips button:hover { border-color: var(--ember); background: rgba(229, 57, 44, 0.12); }
+.ember-form { display: flex; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--line); }
+.ember-form input { flex: 1; min-width: 0; min-height: 44px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--field-line); background: var(--paper); color: var(--ink); font: 15px var(--body); }
+.ember-form input:focus-visible { outline: 2px solid var(--copper); outline-offset: 1px; }
+.ember-form .btn { min-height: 44px; padding: 0 16px; }
+@media (max-width: 640px) {
+  .ember-panel { left: 12px; right: 12px; width: auto; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 60px); max-height: min(70vh, 520px); }
+  .ember-launch { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ember-panel:not([hidden]) { animation: ember-pop 260ms var(--ease-out); }
+  .ember-msg { animation: ember-msg 240ms var(--ease-out); }
+  @keyframes ember-pop { from { opacity: 0; transform: translateY(12px) scale(0.97); } }
+  @keyframes ember-msg { from { opacity: 0; transform: translateY(6px); } }
+}
+@media print { .ember-canvas, .ember-bubble, .ember-launch, .ember-panel { display: none !important; } }

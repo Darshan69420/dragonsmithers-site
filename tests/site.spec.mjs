@@ -5,7 +5,7 @@ const PAGES = ['/', '/business/', '/privacy/', '/portfolio/', '/portfolio/wazuh-
 const WIDTHS = [390, 768, 1280];
 const SCHEMES = ['light', 'dark'];
 // Links to files Darshan still has to add. Remove an entry once the file exists.
-const KNOWN_PENDING = new Set(['/resume.pdf']);
+const KNOWN_PENDING = new Set();
 
 /** Scroll through the page so every scroll-reveal has played, then let the last fades finish. */
 async function settle(page) {
@@ -253,5 +253,54 @@ test.describe('motion', () => {
       const stuck = await page.$$eval('[data-reveal]', (els) => els.filter((e) => !e.classList.contains('in') || getComputedStyle(e).opacity !== '1').map((e) => e.className || e.tagName));
       expect(stuck, path).toEqual([]);
     }
+  });
+});
+
+test.describe('Ember site guide', () => {
+  test('answers from the site, passes axe while open, and closes with Escape', async ({ page }) => {
+    const errors = await watch(page);
+    await page.goto('/portfolio/');
+    const launch = page.locator('.ember-launch');
+    await launch.click();
+    await expect(launch).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('#ember-q')).toBeFocused();
+    await page.fill('#ember-q', 'tell me about his projects');
+    await page.press('#ember-q', 'Enter');
+    await expect(page.locator('.ember-msg.bot').last()).toContainText('Wazuh SIEM');
+    await page.locator('.ember-chips button', { hasText: 'Résumé' }).click();
+    await expect(page.locator('.ember-msg.bot').last().locator('a[href="/resume.pdf"]')).toHaveCount(1);
+    await page.fill('#ember-q', 'what is the capital of france');
+    await page.press('#ember-q', 'Enter');
+    await expect(page.locator('.ember-msg.bot').last()).toContainText('I only know about Darshan');
+    const { violations } = await new AxeBuilder({ page }).include('.ember-panel').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+    expect(violations.filter((v) => ['serious', 'critical'].includes(v.impact)).map((v) => v.id)).toEqual([]);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.ember-panel')).toBeHidden();
+    await expect(launch).toBeFocused();
+    expect(errors).toEqual([]);
+  });
+
+  test('reduced motion never loads the 3D dragon, but the guide still works', async ({ browser }) => {
+    const ctx = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await ctx.newPage();
+    const requested = [];
+    page.on('request', (r) => requested.push(new URL(r.url()).pathname));
+    await page.goto('/portfolio/');
+    await page.waitForLoadState('load');
+    await page.waitForTimeout(3000);
+    expect(requested).not.toContain('/pet.js');
+    await expect(page.locator('html')).not.toHaveClass(/pet-on/);
+    await page.locator('.ember-launch').click();
+    await page.fill('#ember-q', 'how do I contact him');
+    await page.press('#ember-q', 'Enter');
+    await expect(page.locator('.ember-msg.bot').last().locator('a[href^="mailto:darshan@dragonsmithers.com"]')).toHaveCount(1);
+    await ctx.close();
+  });
+
+  test('only appears on the portfolio pages', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.ember-launch')).toHaveCount(0);
+    await page.goto('/portfolio/wazuh-siem/');
+    await expect(page.locator('.ember-launch')).toHaveCount(1);
   });
 });
