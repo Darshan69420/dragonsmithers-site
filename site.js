@@ -252,13 +252,13 @@ const FORM_KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
      and a roar (shake, shockwave, spark burst) on click or tap. The canvas only runs while the
      dragon is on screen and the tab is visible. Reduced-motion users get the still art. */
   const dragon = $('.dragon');
-  if (dragon && !calm.matches) dragonFx(dragon);
+  const dragon2d = dragon && !calm.matches ? dragonFx(dragon) : null;
 
   function dragonFx(el) {
     const canvas = $('.dragon-fx', el);
     const art = $('.dragon-img', el);
     const ctx = canvas && canvas.getContext('2d');
-    if (!ctx || !art) return;
+    if (!ctx || !art) return null;
     const COLORS = ['255,74,48', '255,120,64', '255,176,120', '229,57,44', '255,214,180'];
     const MAX = 280;
     let w = 0, h = 0, dpr = 1, raf = 0, last = 0, onScreen = false, boost = 0, nextArc = 90;
@@ -383,7 +383,8 @@ const FORM_KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
     };
 
     const run = () => {
-      const go = onScreen && !document.hidden && w > 0;
+      // The 3D dragon replaces this one when it's awake (html.pet-on), so stop drawing underneath it.
+      const go = onScreen && !document.hidden && w > 0 && !document.documentElement.classList.contains('pet-on');
       el.classList.toggle('is-idle', !onScreen || document.hidden);
       if (go && !raf) { last = 0; raf = requestAnimationFrame(tick); }
       if (!go && raf) { cancelAnimationFrame(raf); raf = 0; }
@@ -437,6 +438,216 @@ const FORM_KEY_PLACEHOLDER = 'YOUR_WEB3FORMS_ACCESS_KEY';
         });
       });
       headEl.addEventListener('pointerleave', () => { el.style.setProperty('--px', 0); el.style.setProperty('--py', 0); });
+    }
+    return { refresh: run };
+  }
+
+  /* ---- Ember: the portfolio's site guide, with a 3D dragon body (pet.js) ----
+     The guide is scripted: answers come from the facts below (all from this site), matched by
+     keyword. No AI service, and nothing typed here leaves the browser. The 3D dragon loads after
+     the page does, only with motion allowed, WebGL available and the dragon not put to sleep. */
+  if (location.pathname.startsWith('/portfolio')) ember();
+
+  function ember() {
+    const MAIL = `<a href="mailto:${CONTACT_EMAIL}?subject=Opportunity">${CONTACT_EMAIL}</a>`;
+    const RESUME = '<a href="/resume.pdf" download="Darshan-Sanjel-Resume.pdf">download the one-page PDF</a>';
+    const KB = [
+      { keys: ['hi', 'hello', 'hey', 'yo', 'sup', 'help', 'menu', 'what can you do'],
+        a: 'Hi! I\'m Ember, the dragon guarding this portfolio. Ask me about Darshan\'s projects, résumé, skills, certifications, or how to reach him.' },
+      { keys: ['ember', 'dragon', 'pet', '3d', 'bot', 'chatbot', 'robot', 'who are you', 'are you real', 'are you an ai', 'are you ai', 'how were you made', 'three.js'],
+        a: 'I\'m a 3D dragon drawn live in your browser with three.js: 60 joints that follow my head, ribbons with their own physics, and bloom for the glow. My answers are scripted from this site, not an AI, and nothing you type leaves your browser. Click me to make me roar.' },
+      { keys: ['who', 'darshan', 'summary', 'intro', 'introduce', 'background', 'bio'],
+        a: 'Darshan Sanjel is a cybersecurity student in Fairfield, Ohio who learns by running real systems: a self-hosted Wazuh SIEM, a Proxmox VE home lab and a live Google Workspace domain, plus front-line help desk experience. He\'s open to IT support, help desk, data center and security roles.' },
+      { keys: ['project', 'projects', 'built', 'build', 'portfolio', 'showcase', 'work samples'],
+        a: 'Four projects: <a href="/portfolio/wazuh-siem/">Wazuh SIEM</a> (self-hosted security monitoring), <a href="/portfolio/proxmox-lab/">Proxmox home lab</a> (virtualization and networking), <a href="/portfolio/trail-window/">Trail Window</a> (a weather-window planner with a locked-down AI briefing) and <a href="/">DragonSmiths</a> (domain, email and web). The first three have full case studies.' },
+      { keys: ['wazuh', 'siem', 'monitoring', 'alerts', 'logs', 'incident', 'llm', 'language model'],
+        a: 'Wazuh 4.14 all-in-one on an Ubuntu 24.04 VM, with agents on the hypervisor and the SIEM host. Logs go through a Node.js/Express proxy to local language models that draft incident-response write-ups, and a React dashboard shows alerts next to the native UI. <a href="/portfolio/wazuh-siem/">Read the case study</a>.' },
+      { keys: ['proxmox', 'homelab', 'home lab', 'lab', 'hypervisor', 'pihole', 'pi-hole', 'tailscale', 'lxc', 'docker', 'vm', 'gpu', 'virtualization'],
+        a: 'Proxmox VE 9 on a repurposed 64 GB laptop: Linux VMs and LXC containers, TOTP login, Pi-hole DNS filtering, a GPU-accelerated local LLM, and remote access over Tailscale without opening ports. He traced outages to a static-IP misconfiguration and a flaky USB Ethernet adapter. <a href="/portfolio/proxmox-lab/">Read the case study</a>.' },
+      { keys: ['trail', 'trail window', 'weather', 'hike', 'gpx', 'cloudflare', 'worker', 'leaflet'],
+        a: 'Trail Window ranks daylight windows for a hike, ride or run by rain, wind and feels-like, parses GPX routes in the browser, and runs its AI briefing behind a hardened Cloudflare Worker (server-side key, CORS allowlist, validation, rate limiting). <a href="https://sanjeldarshan65-afk.github.io/trail-window/" rel="noopener">Live demo</a> · <a href="/portfolio/trail-window/">case study</a>.' },
+      { keys: ['dragonsmiths', 'domain', 'dns', 'workspace', 'dkim', 'spf', 'dmarc', 'github pages', 'website', 'this site', 'mx'],
+        a: 'Darshan administers the DragonSmiths Google Workspace tenant (users, 2-Step Verification, DKIM), manages its A, CNAME, MX and TXT records, and hosts this site on GitHub Pages with a verified custom domain and enforced HTTPS.' },
+      { keys: ['resume', 'résumé', 'cv', 'pdf', 'download'],
+        a: `You can ${RESUME} or <a href="/portfolio/#resume">read it on this page</a>.` },
+      { keys: ['contact', 'email', 'reach', 'hire', 'hiring', 'job', 'jobs', 'opportunity', 'interview', 'message', 'talk', 'internship', 'available'],
+        a: `Email is the fastest way: ${MAIL}. He's looking for IT support, help desk, data center and security roles and internships around Cincinnati and Dayton.` },
+      { keys: ['skill', 'skills', 'stack', 'tech', 'tools', 'languages', 'javascript', 'linux', 'windows', 'active directory', 'networking', 'know'],
+        a: 'Security: Wazuh, log analysis, SPF/DKIM/DMARC, TOTP 2FA. Systems: Ubuntu, Debian, Windows Server, Active Directory, Proxmox VE, Docker, LXC, Google Workspace Admin. Networking: DNS, Pi-hole, Tailscale, firewall rules. Development: JavaScript, TypeScript, Bash, React, Node.js, SQL, Git. <a href="/portfolio/#skills">Full list</a>.' },
+      { keys: ['experience', 'help desk', 'helpdesk', 'worked', 'employment', 'miami'],
+        a: 'IT Help Desk Assistant at Miami University Regionals, Feb to May 2025: in-person support for students, faculty and staff, password resets and account recovery, and classroom and lab computer setup.' },
+      { keys: ['education', 'school', 'college', 'degree', 'university', 'blue ash', 'study', 'studying', 'student', 'graduate'],
+        a: 'A.S. in Cybersecurity at the University of Cincinnati Blue Ash, expected 2028, with earlier coursework at Miami University Regionals.' },
+      { keys: ['cert', 'certs', 'certification', 'certifications', 'comptia', 'security+', 'a+', 'google', 'certificate'],
+        a: 'He completed the Google Cloud Cybersecurity Certificate and is studying for CompTIA A+ (220-1201/220-1202) and Security+.' },
+      { keys: ['where', 'location', 'based', 'ohio', 'fairfield', 'cincinnati', 'dayton', 'live'],
+        a: 'Fairfield, Ohio. He\'s looking for roles around Cincinnati and Dayton.' },
+      { keys: ['repair', 'fix', 'broken', 'phone', 'laptop', 'computer', 'quote', 'price', 'virus', 'tablet'],
+        a: 'Darshan also runs DragonSmiths Tech Repair for phones, computers and networks. <a href="/">See the repair site</a> or <a href="/#quote">get a quote</a>.' },
+      { keys: ['github', 'code', 'source', 'repo', 'repos'],
+        a: 'His code is on GitHub at <a href="https://github.com/sanjeldarshan65-afk" rel="noopener">sanjeldarshan65-afk</a>, including <a href="https://github.com/sanjeldarshan65-afk/trail-window" rel="noopener">Trail Window</a>.' },
+      { keys: ['thanks', 'thank', 'thx', 'cool', 'nice', 'awesome', 'great', 'love'],
+        a: 'Anytime. If you want to talk to the human, he\'s at ' + MAIL + '.' },
+      { keys: ['roar', 'rawr'], act: 'roar', a: 'RAWR. 🔥' },
+      { keys: ['sleep', 'hide', 'go away', 'disable', 'calm', 'quiet'], act: 'sleep', a: 'Okay, curling up. Say "wake" if you want me back.' },
+      { keys: ['wake', 'come back', 'appear'], act: 'wake', a: 'I\'m up!' },
+      { keys: ['stay', 'sit', 'stop following'], act: 'stay', a: 'Staying put. Say "follow" and I\'ll come with your cursor again.' },
+      { keys: ['follow', 'come here', 'heel'], act: 'follow', a: 'Right behind you.' },
+    ];
+    const FALLBACK = 'I only know about Darshan and this site. Try projects, résumé, skills, certifications, experience or contact.';
+
+    const tokens = (q) => q.toLowerCase().replace(/[^a-z0-9+é.\s-]/g, ' ').split(/\s+/).filter(Boolean);
+    const match = (q) => {
+      const text = ` ${tokens(q).join(' ')} `;
+      const words = new Set(tokens(q).map((w) => w.replace(/\.$/, '')));
+      let best = null, top = 0;
+      for (const item of KB) {
+        let score = 0;
+        for (const k of item.keys) {
+          if (k.includes(' ')) score += text.includes(` ${k} `) ? 2 : 0;
+          else if (words.has(k) || (k.length >= 5 && [...words].some((w) => w.startsWith(k)))) score += 1;
+        }
+        if (score > top) { top = score; best = item; }
+      }
+      return best;
+    };
+
+    /* Markup: a launcher button and a non-modal chat panel. */
+    const launch = document.createElement('button');
+    launch.type = 'button';
+    launch.className = 'ember-launch';
+    launch.setAttribute('aria-expanded', 'false');
+    launch.setAttribute('aria-controls', 'ember-panel');
+    launch.innerHTML = '<img src="/favicon.svg" alt="" width="22" height="22"><span>Ask Ember</span>';
+    const panel = document.createElement('section');
+    panel.className = 'ember-panel';
+    panel.id = 'ember-panel';
+    panel.hidden = true;
+    panel.setAttribute('aria-labelledby', 'ember-title');
+    panel.innerHTML = `
+      <header>
+        <img src="/favicon.svg" alt="" width="34" height="34">
+        <div><h2 id="ember-title">Ember</h2><p>Site guide · scripted, nothing leaves your browser</p></div>
+        <button type="button" class="ember-x" aria-label="Close Ember"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </header>
+      <div class="ember-log" role="log" aria-live="polite" tabindex="0" aria-label="Conversation with Ember"></div>
+      <div class="ember-chips" role="group" aria-label="Suggested questions"></div>
+      <form class="ember-form">
+        <label class="vh" for="ember-q">Ask Ember about Darshan</label>
+        <input id="ember-q" name="q" autocomplete="off" maxlength="200" placeholder="Ask about projects, résumé, skills…">
+        <button type="submit" class="btn solid">Ask</button>
+      </form>`;
+    document.body.append(panel, launch);
+    const log = $('.ember-log', panel);
+    const chips = $('.ember-chips', panel);
+    const input = $('#ember-q', panel);
+
+    let pet = null;
+    let petLoading = false;
+    // The 3D dragon needs a real GPU: on a software renderer it would crawl at a few frames a second.
+    const petPossible = !calm.matches && (() => {
+      try {
+        const gl = document.createElement('canvas').getContext('webgl2') || document.createElement('canvas').getContext('webgl');
+        if (!gl) return false;
+        const info = gl.getExtension('WEBGL_debug_renderer_info');
+        const gpu = info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : '';
+        gl.getExtension('WEBGL_lose_context')?.loseContext();
+        return !/swiftshader|llvmpipe|softpipe|software|basic render/i.test(gpu);
+      } catch { return false; }
+    })();
+    const asleep = () => store.get('ember') === 'asleep';
+
+    const CHIPS = [['Projects', 'projects'], ['Résumé', 'resume'], ['Skills', 'skills'], ['Contact', 'contact'], ['Who are you?', 'who are you']];
+    const renderChips = () => {
+      chips.replaceChildren(...CHIPS.concat(petPossible ? [pet ? ['Roar!', 'roar'] : ['Wake the dragon', 'wake']] : []).map(([label, q]) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = label;
+        b.addEventListener('click', () => ask(q, label));
+        return b;
+      }));
+    };
+    const add = (who, html) => {
+      const p = document.createElement('p');
+      p.className = `ember-msg ${who}`;
+      if (who === 'me') p.textContent = html; else p.innerHTML = html;
+      log.append(p);
+      log.scrollTop = log.scrollHeight;
+    };
+    const ask = (q, shown = q) => {
+      add('me', shown);
+      const item = match(q);
+      if (item && item.act) act(item.act);
+      add('bot', item ? item.a : FALLBACK);
+      if (pet) pet.speak(1.2);
+      renderChips();
+    };
+    const act = (what) => {
+      if (what === 'roar' && pet) pet.roar();
+      if (what === 'sleep') { store.set('ember', 'asleep'); sleepPet(); }
+      if (what === 'wake') { store.set('ember', null); wakePet(); }
+      if (what === 'stay' && pet) pet.setFollow(false);
+      if (what === 'follow' && pet) pet.setFollow(true);
+    };
+
+    const open = (focus = true) => {
+      if (!panel.hidden) return;
+      panel.hidden = false;
+      launch.setAttribute('aria-expanded', 'true');
+      document.documentElement.classList.add('ember-open');
+      if (!log.childElementCount) add('bot', KB[0].a);
+      renderChips();
+      if (pet) pet.setChat(true);
+      if (focus) input.focus({ preventScroll: true });
+    };
+    const close = () => {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      launch.setAttribute('aria-expanded', 'false');
+      document.documentElement.classList.remove('ember-open');
+      if (pet) pet.setChat(false);
+      launch.focus({ preventScroll: true });
+    };
+    launch.addEventListener('click', () => (panel.hidden ? open() : close()));
+    $('.ember-x', panel).addEventListener('click', close);
+    panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    $('.ember-form', panel).addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = input.value.trim();
+      if (!q) return;
+      input.value = '';
+      ask(q);
+    });
+
+    /* The 3D body */
+    function wakePet() {
+      if (pet || petLoading || !petPossible) return;
+      petLoading = true;
+      import('/pet.js').then((m) => {
+        pet = m.start({
+          perch: () => $('.dragon'),
+          chatRect: () => (panel.hidden ? null : panel.getBoundingClientRect()),
+          onPoke: () => open(false),
+        });
+        document.documentElement.classList.add('pet-on');
+        if (dragon2d) dragon2d.refresh();
+        if (!panel.hidden) pet.setChat(true);
+        let greeted = false;
+        try { greeted = sessionStorage.getItem('ember-hi') === '1'; sessionStorage.setItem('ember-hi', '1'); } catch { /* storage blocked */ }
+        if (!greeted) setTimeout(() => pet && pet.say('Hi, I\'m Ember! Click me to ask about Darshan.', 4200), 1400);
+        renderChips();
+      }).catch(() => { /* No WebGL after all: the 2D art and the chat still work. */ }).finally(() => { petLoading = false; });
+    }
+    function sleepPet() {
+      if (!pet) return;
+      pet.stop();
+      pet = null;
+      document.documentElement.classList.remove('pet-on');
+      if (dragon2d) dragon2d.refresh();
+    }
+    if (petPossible && !asleep()) {
+      const later = () => ('requestIdleCallback' in window ? requestIdleCallback(wakePet, { timeout: 2500 }) : setTimeout(wakePet, 1200));
+      if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
     }
   }
 

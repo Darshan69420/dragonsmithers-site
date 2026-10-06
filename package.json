@@ -8,6 +8,7 @@
     "lhci": "lhci autorun",
     "og": "node tools/og-images.mjs",
     "resume": "node tools/resume-pdf.mjs",
+    "pet": "node tools/build-pet.mjs",
     "fonts": "python3 tools/subset-fonts.py"
   },
   "devDependencies": {
@@ -16,7 +17,9 @@
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "1.56.1",
+    "esbuild": "^0.28.2",
     "http-server": "^14.1.1",
-    "lighthouse": "^13.5.0"
+    "lighthouse": "^13.5.0",
+    "three": "^0.186.1"
   }
 }
